@@ -6,7 +6,9 @@ library(shinycssloaders)
 library(knitr)
 
 ui <- dashboardPage(
+    
     skin = "green",
+    
     # Header panel
     dashboardHeader(title = "Shiny Networks"),
     
@@ -31,6 +33,7 @@ ui <- dashboardPage(
             
             # Homepage
             tabItem(tabName = "overview",
+                    column(12, align = "center", titlePanel(HTML('<font size="10">A selection of Network Models</font>'))),
                     fluidRow(
                         column(4, align = "bottom", 
                                box(
@@ -117,6 +120,9 @@ ui <- dashboardPage(
             tabItem(tabName = "model2",
                     column(12, align = "center", titlePanel("Watts-Strogatz model")),
                     fluidPage(
+                        
+                        tags$head(tags$style(".progress-bar{background-color:#00cc00;}")),
+                        
                         sidebarPanel(
                             # sliderInput(
                             #     "dimensions", "Number of dimensions",
@@ -194,6 +200,7 @@ ui <- dashboardPage(
             
             # Geometric random sampling
             tabItem(tabName = "model5",
+                    column(12, align = "center", titlePanel("Geometric Random model")),
                     fluidRow()
             ),
             
@@ -264,14 +271,19 @@ server <- function(input, output) {
     ## Resample when button is pressed ##
     observeEvent(input$sample2,
                  {
-                     g <- igraph::sample_smallworld(dim = 1, size = input$size, nei = input$neighbourhood, p = input$probability)
-                     clusters2 <- igraph::spinglass.community(g)$membership
-                     g <- igraph::get.adjacency(g)
-                     output$WSplot <- renderPlot({qgraph::qgraph(g, color = clusters2, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
-                                                                 border.color = "black", shape = "circle",label.cex = 1.5, label.color = "white", repulsion = 2,
-                                                                 bg = "gray94", borders = FALSE)},
-                                                 width = 950, 
-                                                 height = 700)
+                     withProgress(message = 'Plotting', value = 0, {
+                         g <- igraph::sample_smallworld(dim = 1, size = input$size, nei = input$neighbourhood, p = input$probability)
+                         incProgress(1/3)
+                         clusters2 <- igraph::spinglass.community(g)$membership
+                         incProgress(1/3)
+                         g <- igraph::get.adjacency(g)
+                         incProgress(1/3)
+                         output$WSplot <- renderPlot({qgraph::qgraph(g, color = clusters2, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                                     border.color = "black", shape = "circle",label.cex = 1.5, label.color = "white", repulsion = 2,
+                                                                     bg = "gray94", borders = FALSE)},
+                                                     width = 950, 
+                                                     height = 700)
+                     })
                  })
     ## Initialize Erdos-Renyi ##
     g3 <- igraph::erdos.renyi.game(n = 150, p.or.m = 400, type = "gnm", directed = FALSE)
