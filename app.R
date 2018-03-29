@@ -20,9 +20,11 @@ ui <- dashboardPage(
                      menuSubItem("Erdos-Renyi model", tabName = "model3"),
                      menuSubItem("Watts-Strogatz model", tabName = "model2"),
                      menuSubItem("Barabasi-Albert model", tabName = "model1"),
-                     menuSubItem("Geometric random model", tabName = "model5"),
-                     menuSubItem("Growing random model", tabName = "model6"),
-                     menuSubItem("Forest fire model", tabName = "model4")),
+                     menuSubItem("Geometric Random model", tabName = "model5"),
+                     menuSubItem("Growing Random model", tabName = "model6"),
+                     menuSubItem("Forest Fire model", tabName = "model4")),
+            menuItem("Upload Data", tabName = "upload", icon = icon("database")),
+            menuItem("Info", tabName = "info", icon = icon("info")),
             menuItem("Quiz",tabName = "quiz", icon = icon("question"))
         )
     ),
@@ -85,9 +87,8 @@ ui <- dashboardPage(
             # Barabasi-Albert sampling
             tabItem(tabName = "model1",
                     fluidPage(
-                        column(12, align = "center", titlePanel("Barabasi-Albert model")),
                         fluidRow(
-                            sidebarPanel(
+                            sidebarPanel(h1("Barabasi-Albert model"),
                                 sliderInput(
                                     "n", 
                                     "Number of vertices",
@@ -118,15 +119,11 @@ ui <- dashboardPage(
             
             # Watts-Strogatz sampling
             tabItem(tabName = "model2",
-                    column(12, align = "center", titlePanel("Watts-Strogatz model")),
                     fluidPage(
                         
                         tags$head(tags$style(".progress-bar{background-color:#00cc00;}")),
                         
-                        sidebarPanel(
-                            # sliderInput(
-                            #     "dimensions", "Number of dimensions",
-                            #     min = 1, max = 3, step = 1, value = 1),
+                        sidebarPanel(h1("Watts-Strogatz model"),
                             sliderInput(
                                 "size", "Size",
                                 min = 10, max = 200, step = 1, value = 100),
@@ -147,9 +144,8 @@ ui <- dashboardPage(
             
             # Erdos-Renyi sampling
             tabItem(tabName = "model3",
-                    column(12, align = "center", titlePanel("Erdos-Renyi model")),
                     fluidPage(
-                        sidebarPanel(
+                        sidebarPanel(h1("Erdos-Renyi model"),
                             sliderInput(
                                 "vertices", "Number of vertices",
                                 min = 10, max = 200, step = 1, value = 150),
@@ -170,9 +166,8 @@ ui <- dashboardPage(
             
             # Forest Fire sampling
             tabItem(tabName = "model4",
-                    column(12, align = "center", titlePanel("Forest Fire model")),
                     fluidPage(
-                        sidebarPanel(
+                        sidebarPanel(h1("Forest Fire model"),
                             sliderInput(
                                 "nodes", "Number of nodes",
                                 min = 10, max = 200, step = 1, value = 100),
@@ -182,9 +177,6 @@ ui <- dashboardPage(
                             sliderInput(
                                 "probback", "Burning backwards probability",
                                 min = 0, max = 1, step = 0.1, value = .5),
-                            # sliderInput(
-                            #     "ambs", "Ambassador vertices",
-                            #     min = 0, max = 200, step = 1, value = 100),
                             checkboxInput(
                                 "directed4",
                                 "Directed graph"
@@ -200,15 +192,29 @@ ui <- dashboardPage(
             
             # Geometric random sampling
             tabItem(tabName = "model5",
-                    column(12, align = "center", titlePanel("Geometric Random model")),
-                    fluidRow()
+                    fluidPage(
+                        sidebarPanel(h1("Geometric Random model"),
+                            sliderInput(
+                                "node", "Number of nodes",
+                                min = 0, max = 200, step = 1, value = 100),
+                            sliderInput(
+                                "radius", "size of radius",
+                                min = 0.2, max = 1, step = 0.01, value = 0.2),
+                            checkboxInput(
+                                "torus", "Use torus"),
+                            actionButton('sample5', 'Resample')
+                            
+                        ),
+                        mainPanel(
+                            withSpinner(plotOutput("RGGplot"), type = 6, color = "green")
+                        )
+                    )
             ),
             
             # Growing random sampling
             tabItem(tabName = "model6",
-                    column(12, align = "center", titlePanel("Growing Random model")),
                     fluidPage(
-                        sidebarPanel(
+                        sidebarPanel(h1("Growing Random model"),
                             sliderInput(
                                 "vertices", "Number of vertices",
                                 min = 10, max = 200, step = 1, value = 100),
@@ -221,7 +227,7 @@ ui <- dashboardPage(
                             ),
                             checkboxInput(
                                 "citation",
-                                "Citation graph"
+                                "Citation graph: in each time step the added edges are originating from the new vertex"
                             ),
                             actionButton('sample6', 'Resample')
                             
@@ -230,6 +236,18 @@ ui <- dashboardPage(
                             withSpinner(plotOutput("SGplot"),type = 6, color = "green")
                         )
                     )
+            ),
+            tabItem(tabName = "info",
+                    column(12, align = "center", titlePanel("Information")),
+                    fluidRow()
+            ),
+            tabItem(tabName = "upload",
+                    column(12, align = "center", titlePanel("Upload Data")),
+                    fluidRow()
+            ),
+            tabItem(tabName = "quiz",
+                    column(12, align = "center", titlePanel("Quiz")),
+                    fluidRow()
             )
         )
     )
@@ -249,14 +267,19 @@ server <- function(input, output) {
     
     ## Resample when button is pressed ##
     observeEvent(input$sample1, {
-        g <- igraph::sample_pa(n = input$n, power = input$power, m = input$m, directed = input$directed1)
-        clusters1 <- igraph::spinglass.community(g)$membership
-        g <- igraph::get.adjacency(g)
-        output$BAplot <- renderPlot({qgraph::qgraph(g, color = clusters1, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
-                                                    border.color = "black", shape = "circle",label.cex = 1.5, label.color = "white",
-                                                    bg = "gray94", borders = FALSE)},
-                                    width = 950, 
-                                    height = 700)
+        withProgress(message = 'Generating graph', value = 0, {
+            g <- igraph::sample_pa(n = input$n, power = input$power, m = input$m, directed = input$directed1)
+            incProgress(1/3)
+            clusters1 <- igraph::spinglass.community(g)$membership
+            incProgress(1/3)
+            g <- igraph::get.adjacency(g)
+            incProgress(1/3)
+            output$BAplot <- renderPlot({qgraph::qgraph(g, color = clusters1, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                        border.color = "black", shape = "circle",label.cex = 1.5, label.color = "white",
+                                                        bg = "gray94", borders = FALSE)},
+                                        width = 950, 
+                                        height = 700)
+        })
     })
     
     ## Initialize Watts-Strogatz ##
@@ -271,7 +294,7 @@ server <- function(input, output) {
     ## Resample when button is pressed ##
     observeEvent(input$sample2,
                  {
-                     withProgress(message = 'Plotting', value = 0, {
+                     withProgress(message = 'Generating graph', value = 0, {
                          g <- igraph::sample_smallworld(dim = 1, size = input$size, nei = input$neighbourhood, p = input$probability)
                          incProgress(1/3)
                          clusters2 <- igraph::spinglass.community(g)$membership
@@ -290,7 +313,7 @@ server <- function(input, output) {
     # Some error handling
     p <- try({clusters3 <- igraph::spinglass.community(g3)$membership})
     if(class(p) == "try-error"){
-        clusters3 <- "red" 
+        clusters3 <- "black" 
     }
     g3 <- igraph::get.adjacency(g3)
     output$ERplot <- renderPlot({qgraph::qgraph(g3, color = clusters3, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
@@ -301,17 +324,22 @@ server <- function(input, output) {
     ## Resample when button is pressed ##
     observeEvent(input$sample3,
                  {
-                     g3 <- igraph::erdos.renyi.game(n = input$vertices, p.or.m = input$edges, type = "gnm", directed = input$directed3)
-                     p3 <- try({clusters3 <- spinglass.community(g3)$membership})
-                     if(class(p3) == "try-error"){
-                         clusters3 <- "red" 
-                     }
-                     g3 <- igraph::get.adjacency(g3)
-                     output$ERplot <- renderPlot({qgraph::qgraph(g3, color = clusters3, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
-                                                                 border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
-                                                                 bg = "gray94", borders = FALSE)}, 
-                                                 width = 950, 
-                                                 height = 700)
+                     withProgress(message = 'Generating graph', value = 0, {
+                         g3 <- igraph::erdos.renyi.game(n = input$vertices, p.or.m = input$edges, type = "gnm", directed = input$directed3)
+                         incProgress(1/3)
+                         p3 <- try({clusters3 <- spinglass.community(g3)$membership})
+                         if(class(p3) == "try-error"){
+                             clusters3 <- "black" 
+                         }
+                         incProgress(1/3)
+                         g3 <- igraph::get.adjacency(g3)
+                         incProgress(1/3)
+                         output$ERplot <- renderPlot({qgraph::qgraph(g3, color = clusters3, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                                     border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
+                                                                     bg = "gray94", borders = FALSE)}, 
+                                                     width = 950, 
+                                                     height = 700)
+                     })
                  })
     
     ## Initialize Forest Fire model ##
@@ -327,17 +355,56 @@ server <- function(input, output) {
     ## Resample when button is pressed ##
     observeEvent(input$sample4,
                  {
-                     g4 <- igraph::sample_forestfire(nodes = input$nodes, fw.prob=input$probfor,bw.factor=input$probback,
-                                                     #ambs=input$ambs, 
-                                                     directed = input$directed4)
-                     clusters4 <- spinglass.community(g4)$membership
-                     g4 <- igraph::get.adjacency(g4)
-                     output$FFplot <- renderPlot({qgraph::qgraph(g4, color = clusters4, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
-                                                                 border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
-                                                                 bg = "gray94", borders = FALSE)},
-                                                 width = 950, 
-                                                 height = 700
-                     )
+                     withProgress(message = 'Generating graph', value = 0, {
+                         g4 <- igraph::sample_forestfire(nodes = input$nodes, fw.prob=input$probfor,bw.factor=input$probback,
+                                                         directed = input$directed4)
+                         incProgress(1/3)
+                         clusters4 <- spinglass.community(g4)$membership
+                         incProgress(1/3)
+                         g4 <- igraph::get.adjacency(g4)
+                         incProgress(1/3)
+                         output$FFplot <- renderPlot({qgraph::qgraph(g4, color = clusters4, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                                     border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
+                                                                     bg = "gray94", borders = FALSE)},
+                                                     width = 950, 
+                                                     height = 700
+                         )
+                     })
+                 })
+    
+    ## Initialize Geometric random model ##
+    g5 <- sample_grg(nodes = 100, radius = 0.2, torus = FALSE)
+    p5 <- try({clusters5 <- spinglass.community(g5)$membership})
+    if (class(p5) == "try-error"){
+        clusters5 <- "black"
+    }
+    g5 <- igraph::get.adjacency(g5)
+    output$RGGplot <- renderPlot({qgraph::qgraph(g5, color = clusters5, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
+                                                bg = "gray94", borders = FALSE)},
+                                width = 950, 
+                                height = 700
+    )
+    ## Resample when button is pressed ##
+    observeEvent(input$sample5,
+                 {
+                     withProgress(message = 'Generating graph', value = 0, {
+                         g5 <- sample_grg(nodes = input$node, radius = input$radius, torus = input$torus)
+                         incProgress(1/3)
+                         p5 <- try({clusters5 <- spinglass.community(g5)$membership})
+                         if (class(p5) == "try-error"){
+                             clusters5 <- "black"
+                         }
+                         incProgress(1/3)
+                         g5 <- igraph::get.adjacency(g5)
+                         incProgress(1/3)
+                         output$RGGplot <- renderPlot({qgraph::qgraph(g5, color = clusters5, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                                      border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
+                                                                      bg = "gray94", borders = FALSE)},
+                                                      width = 950, 
+                                                      height = 700
+                         )
+                     })
                  })
     
     ## Initialize Growing random model ##
@@ -352,14 +419,18 @@ server <- function(input, output) {
     ## Resample when button is pressed ##
     observeEvent(input$sample6,
                  {
-                     g6 <- sample_growing(n = input$vertices, m = input$edges, citation=input$citation, directed = input$directed6)
-                     g6 <- igraph::get.adjacency(g6)
-                     output$SGplot <- renderPlot({qgraph::qgraph(g6, color = "black", edge.color = "darkgrey", edge.width = .5, vsize = 5, 
-                                                                 border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
-                                                                 bg = "gray94", borders = FALSE)},
-                                                 width = 950, 
-                                                 height = 700
-                     )
+                     withProgress(message = 'Generating graph', value = 0, {
+                         g6 <- sample_growing(n = input$vertices, m = input$edges, citation=input$citation, directed = input$directed6)
+                         incProgress(1/2)
+                         g6 <- igraph::get.adjacency(g6)
+                         incProgress(1/2)
+                         output$SGplot <- renderPlot({qgraph::qgraph(g6, color = "black", edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                                     border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
+                                                                     bg = "gray94", borders = FALSE)},
+                                                     width = 950, 
+                                                     height = 700
+                         )
+                     })
                  })
     
 }
