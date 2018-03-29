@@ -7,22 +7,29 @@ library(knitr)
 
 ui <- dashboardPage(
     skin = "green",
+    # Header panel
     dashboardHeader(title = "Shiny Networks"),
+    
+    # Sidebar panel
     dashboardSidebar(
         sidebarMenu(
             menuItem("Home", tabName = "overview", icon = icon("home")),
             menuItem("Simulate", tabName = "simulation", icon = icon("calculator"),
-                     menuSubItem("Erdos-Renyi graph", tabName = "model3"),
-                     menuSubItem("Watts-Strogatz graph", tabName = "model2"),
-                     menuSubItem("Barabasi-Albert graph", tabName = "model1"),
-                     menuSubItem("Geometric random graph", tabName = "model5"),
-                     menuSubItem("Growing random graph", tabName = "model6"),
-                     menuSubItem("Forest fire graph", tabName = "model4")),
+                     menuSubItem("Erdos-Renyi model", tabName = "model3"),
+                     menuSubItem("Watts-Strogatz model", tabName = "model2"),
+                     menuSubItem("Barabasi-Albert model", tabName = "model1"),
+                     menuSubItem("Geometric random model", tabName = "model5"),
+                     menuSubItem("Growing random model", tabName = "model6"),
+                     menuSubItem("Forest fire model", tabName = "model4")),
             menuItem("Quiz",tabName = "quiz", icon = icon("question"))
         )
     ),
+    
+    # Body
     dashboardBody(
         tabItems(
+            
+            # Homepage
             tabItem(tabName = "overview",
                     fluidRow(
                         column(4, align = "bottom", 
@@ -71,9 +78,11 @@ ui <- dashboardPage(
                                ))
                     )
             ),
+            
+            # Barabasi-Albert sampling
             tabItem(tabName = "model1",
                     fluidPage(
-                        titlePanel("Barabasi-Albert graph"),
+                        column(12, align = "center", titlePanel("Barabasi-Albert model")),
                         fluidRow(
                             sidebarPanel(
                                 sliderInput(
@@ -103,8 +112,10 @@ ui <- dashboardPage(
                         )
                     )
             ),
+            
+            # Watts-Strogatz sampling
             tabItem(tabName = "model2",
-                    titlePanel("Watts-Strogatz graph"),
+                    column(12, align = "center", titlePanel("Watts-Strogatz model")),
                     fluidPage(
                         sidebarPanel(
                             # sliderInput(
@@ -127,13 +138,15 @@ ui <- dashboardPage(
                             withSpinner(plotOutput("WSplot"), type = 6, color = "green")
                         )
                     )),
+            
+            # Erdos-Renyi sampling
             tabItem(tabName = "model3",
-                    titlePanel("Erdos-Renyi graph"),
+                    column(12, align = "center", titlePanel("Erdos-Renyi model")),
                     fluidPage(
                         sidebarPanel(
                             sliderInput(
                                 "vertices", "Number of vertices",
-                                min = 10, max = 200, step = 1, value = 100),
+                                min = 10, max = 200, step = 1, value = 150),
                             sliderInput(
                                 "edges", "Number of edges",
                                 min = 0, max = 500, step = 1, value = 250),
@@ -148,12 +161,18 @@ ui <- dashboardPage(
                         )
                     )
             ),
+            
+            # Forest Fire sampling
             tabItem(tabName = "model4",
                     fluidRow()
             ),
+            
+            # Geometric random sampling
             tabItem(tabName = "model5",
                     fluidRow()
             ),
+            
+            # Growing random sampling
             tabItem(tabName = "model6",
                     fluidRow()
             )
@@ -163,69 +182,74 @@ ui <- dashboardPage(
 
 server <- function(input, output) { 
     
-    # Initialize the graph
-    g <- igraph::sample_pa(n = 100, power = 1, m = 1, directed = FALSE)
-    clusters <- spinglass.community(g)$membership
-    g <- igraph::get.adjacency(g)
-    output$BAplot <- renderPlot({qgraph::qgraph(g, color = clusters, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+    ## Initialize Barabasi-Albert ##
+    g1 <- igraph::sample_pa(n = 150, power = 1, m = 1, directed = FALSE)
+    clusters1 <- igraph::spinglass.community(g1)$membership
+    g1 <- igraph::get.adjacency(g1)
+    output$BAplot <- renderPlot({qgraph::qgraph(g1, color = clusters1, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                 border.color = "black", shape = "circle",label.cex = 1.5, label.color = "white",
-                                                bg = "gray94")},
+                                                bg = "gray94", borders = FALSE)},
                                 width = 950, 
                                 height = 700)
     
-    
+    ## Resample when button is pressed ##
     observeEvent(input$sample1, {
         g <- igraph::sample_pa(n = input$n, power = input$power, m = input$m, directed = input$directed1)
-        clusters <- spinglass.community(g)$membership
+        clusters1 <- igraph::spinglass.community(g)$membership
         g <- igraph::get.adjacency(g)
-        output$BAplot <- renderPlot({qgraph::qgraph(g, color = clusters, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+        output$BAplot <- renderPlot({qgraph::qgraph(g, color = clusters1, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                     border.color = "black", shape = "circle",label.cex = 1.5, label.color = "white",
-                                                    bg = "gray94")},
+                                                    bg = "gray94", borders = FALSE)},
                                     width = 950, 
                                     height = 700)
     })
  
-    # Initialize the graph
-    g <- sample_smallworld(dim = 1, size = 100, nei = 5, p = .1)
-    clusters <- spinglass.community(g)$membership
-    g <- get.adjacency(g)
-    output$WSplot <- renderPlot({qgraph::qgraph(g, color = clusters, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+    ## Initialize Watts-Strogatz ##
+    g2 <- igraph::sample_smallworld(dim = 1, size = 100, nei = 5, p = .1)
+    clusters2 <- igraph::spinglass.community(g2)$membership
+    g2 <- igraph::get.adjacency(g2)
+    output$WSplot <- renderPlot({qgraph::qgraph(g2, color = clusters2, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                 border.color = "black", shape = "circle",label.cex = 1.5, label.color = "white", repulsion = 2,
-                                                bg = "gray94")},
+                                                bg = "gray94", borders = FALSE)},
                                 width = 950, 
                                 height = 700)
+    ## Resample when button is pressed ##
     observeEvent(input$sample2,
                  {
-                     g <- sample_smallworld(dim = 1, size = input$size, nei = input$neighbourhood, p = input$probability)
-                     clusters <- spinglass.community(g)$membership
-                     g <- get.adjacency(g)
-                     output$WSplot <- renderPlot({qgraph::qgraph(g, color = clusters, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                     g <- igraph::sample_smallworld(dim = 1, size = input$size, nei = input$neighbourhood, p = input$probability)
+                     clusters2 <- igraph::spinglass.community(g)$membership
+                     g <- igraph::get.adjacency(g)
+                     output$WSplot <- renderPlot({qgraph::qgraph(g, color = clusters2, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                                  border.color = "black", shape = "circle",label.cex = 1.5, label.color = "white", repulsion = 2,
-                                                                 bg = "gray94")},
+                                                                 bg = "gray94", borders = FALSE)},
                                                  width = 950, 
                                                  height = 700)
                  })
-    
-    # Initialize the graph
-    g <- erdos.renyi.game(n = 100, p.or.m = 250, type = "gnm", directed = FALSE)
-    p <- try({clusters <- spinglass.community(g)$membership})
+    ## Initialize Erdos-Renyi ##
+    g3 <- igraph::erdos.renyi.game(n = 150, p.or.m = 250, type = "gnm", directed = FALSE)
+    # Some error handling
+    p <- try({clusters3 <- igraph::spinglass.community(g3)$membership})
     if(class(p) == "try-error"){
-        clusters <- "red"           # Error color
+        clusters3 <- "red" 
     }
-    g <- igraph::get.adjacency(g)
-    output$ERplot <- renderPlot({qgraph::qgraph(g, color = clusters, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+    g3 <- igraph::get.adjacency(g3)
+    output$ERplot <- renderPlot({qgraph::qgraph(g3, color = clusters3, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                 border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
-                                                bg = "gray94")}, 
+                                                bg = "gray94", borders = FALSE)}, 
                                 width = 950, 
                                 height = 700)
+    ## Resample when button is pressed ##
     observeEvent(input$sample3,
                  {
-                     g <- erdos.renyi.game(n = input$vertices, p.or.m = input$edges, type = "gnm", directed = input$directed3)
-                     clusters <- spinglass.community(g)$membership
-                     g <- igraph::get.adjacency(g)
-                     output$ERplot <- renderPlot({qgraph::qgraph(g, color = clusters, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                     g3 <- igraph::erdos.renyi.game(n = input$vertices, p.or.m = input$edges, type = "gnm", directed = input$directed3)
+                     p3 <- try({clusters3 <- spinglass.community(g3)$membership})
+                     if(class(p3) == "try-error"){
+                         clusters3 <- "red" 
+                     }
+                     g3 <- igraph::get.adjacency(g3)
+                     output$ERplot <- renderPlot({qgraph::qgraph(g3, color = clusters3, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                                  border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
-                                                                 bg = "gray94")}, 
+                                                                 bg = "gray94", borders = FALSE)}, 
                                                  width = 950, 
                                                  height = 700)
                  })
