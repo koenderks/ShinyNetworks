@@ -149,7 +149,7 @@ ui <- dashboardPage(
                                 min = 10, max = 200, step = 1, value = 150),
                             sliderInput(
                                 "edges", "Number of edges",
-                                min = 0, max = 500, step = 1, value = 250),
+                                min = 400, max = 800, step = 1, value = 400),
                             checkboxInput(
                                 "directed3",
                                 "Directed graph"
@@ -164,7 +164,32 @@ ui <- dashboardPage(
             
             # Forest Fire sampling
             tabItem(tabName = "model4",
-                    fluidRow()
+                    column(12, align = "center", titlePanel("Forest Fire model")),
+                    fluidPage(
+                        sidebarPanel(
+                            sliderInput(
+                                "nodes", "Number of nodes",
+                                min = 10, max = 200, step = 1, value = 100),
+                            sliderInput(
+                                "probfor", "Burning forward probability",
+                                min = 0, max = 1, step = 0.1, value = .5),
+                            sliderInput(
+                                "probback", "Burning backwards probability",
+                                min = 0, max = 1, step = 0.1, value = .5),
+                            # sliderInput(
+                            #     "ambs", "Ambassador vertices",
+                            #     min = 0, max = 200, step = 1, value = 100),
+                            checkboxInput(
+                                "directed4",
+                                "Directed graph"
+                            ),
+                            actionButton('sample4', 'Resample')
+                            
+                        ),
+                        mainPanel(
+                            withSpinner(plotOutput("FFplot"), type = 6, color = "green")
+                        )
+                    )
             ),
             
             # Geometric random sampling
@@ -174,7 +199,30 @@ ui <- dashboardPage(
             
             # Growing random sampling
             tabItem(tabName = "model6",
-                    fluidRow()
+                    column(12, align = "center", titlePanel("Growing Random model")),
+                    fluidPage(
+                        sidebarPanel(
+                            sliderInput(
+                                "vertices", "Number of vertices",
+                                min = 10, max = 200, step = 1, value = 100),
+                            sliderInput(
+                                "edges", "Edges added in each time step",
+                                min = 1, max = 10, step = 1, value = 1),
+                            checkboxInput(
+                                "directed6",
+                                "Directed graph"
+                            ),
+                            checkboxInput(
+                                "citation",
+                                "Citation graph"
+                            ),
+                            actionButton('sample6', 'Resample')
+                            
+                        ),
+                        mainPanel(
+                            withSpinner(plotOutput("SGplot"),type = 6, color = "green")
+                        )
+                    )
             )
         )
     )
@@ -203,7 +251,7 @@ server <- function(input, output) {
                                     width = 950, 
                                     height = 700)
     })
- 
+    
     ## Initialize Watts-Strogatz ##
     g2 <- igraph::sample_smallworld(dim = 1, size = 100, nei = 5, p = .1)
     clusters2 <- igraph::spinglass.community(g2)$membership
@@ -226,7 +274,7 @@ server <- function(input, output) {
                                                  height = 700)
                  })
     ## Initialize Erdos-Renyi ##
-    g3 <- igraph::erdos.renyi.game(n = 150, p.or.m = 250, type = "gnm", directed = FALSE)
+    g3 <- igraph::erdos.renyi.game(n = 150, p.or.m = 400, type = "gnm", directed = FALSE)
     # Some error handling
     p <- try({clusters3 <- igraph::spinglass.community(g3)$membership})
     if(class(p) == "try-error"){
@@ -252,6 +300,54 @@ server <- function(input, output) {
                                                                  bg = "gray94", borders = FALSE)}, 
                                                  width = 950, 
                                                  height = 700)
+                 })
+    
+    ## Initialize Forest Fire model ##
+    g4 <- igraph::sample_forestfire(nodes = 100, fw.prob=0.5, bw.factor=0.5,directed = FALSE)
+    clusters4 <- spinglass.community(g4)$membership
+    g4 <- igraph::get.adjacency(g4)
+    output$FFplot <- renderPlot({qgraph::qgraph(g4, color = clusters4, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
+                                                bg = "gray94", borders = FALSE)},
+                                width = 950, 
+                                height = 700
+    )
+    ## Resample when button is pressed ##
+    observeEvent(input$sample4,
+                 {
+                     g4 <- igraph::sample_forestfire(nodes = input$nodes, fw.prob=input$probfor,bw.factor=input$probback,
+                                                     #ambs=input$ambs, 
+                                                     directed = input$directed4)
+                     clusters4 <- spinglass.community(g4)$membership
+                     g4 <- igraph::get.adjacency(g4)
+                     output$FFplot <- renderPlot({qgraph::qgraph(g4, color = clusters4, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                                 border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
+                                                                 bg = "gray94", borders = FALSE)},
+                                                 width = 950, 
+                                                 height = 700
+                     )
+                 })
+    
+    ## Initialize Growing random model ##
+    g6 <- sample_growing(n = 100, m = 1, citation=FALSE, directed = FALSE)
+    g6 <- igraph::get.adjacency(g6)
+    output$SGplot <- renderPlot({qgraph::qgraph(g6, color = "black", edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
+                                                bg = "gray94", borders = FALSE)},
+                                width = 950, 
+                                height = 700
+    )
+    ## Resample when button is pressed ##
+    observeEvent(input$sample6,
+                 {
+                     g6 <- sample_growing(n = input$vertices, m = input$edges, citation=input$citation, directed = input$directed6)
+                     g6 <- igraph::get.adjacency(g6)
+                     output$SGplot <- renderPlot({qgraph::qgraph(g6, color = "black", edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                                 border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
+                                                                 bg = "gray94", borders = FALSE)},
+                                                 width = 950, 
+                                                 height = 700
+                     )
                  })
     
 }
