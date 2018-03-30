@@ -5,14 +5,14 @@ library(igraph)
 library(shinycssloaders)
 library(knitr)
 
+# UI ----
 ui <- dashboardPage(
     
     skin = "green",
     
-    # Header panel
     dashboardHeader(title = "Shiny Networks"),
     
-    # Sidebar panel
+    # Menu options----
     dashboardSidebar(
         sidebarMenu(
             menuItem("Home", tabName = "overview", icon = icon("home")),
@@ -33,16 +33,10 @@ ui <- dashboardPage(
     dashboardBody(
         tabItems(
             
-            # Homepage
+            # Homepage----
             tabItem(tabName = "overview",
                     column(12, align = "center", titlePanel(HTML('<font size="10">Untangling the Growing Network Web</font>'))),
                     fluidRow(
-                        column( 4, align = "bottom",
-                                box(
-                                    title = "Barabasi-Albert model", status = "success", solidHeader = TRUE,
-                                    collapsible = FALSE,width = 10,
-                                    img(src = 'model1.gif', height = 250, width = 350, align = "center")
-                                )),
                         column( 4, align = "bottom",
                                 box(
                                     title = "Erdos-Renyi model", status = "success", solidHeader = TRUE,
@@ -54,6 +48,12 @@ ui <- dashboardPage(
                                     title = "Watts-Strogatz model", status = "success", solidHeader = TRUE,
                                     collapsible = FALSE,width = 10, 
                                     img(src = 'model2.gif', height = 250, width = 350, align = "center")
+                                )),
+                        column( 4, align = "bottom",
+                                box(
+                                    title = "Barabasi-Albert model", status = "success", solidHeader = TRUE,
+                                    collapsible = FALSE,width = 10,
+                                    img(src = 'model1.gif', height = 250, width = 350, align = "center")
                                 ))),
                     
                     fluidRow(
@@ -79,12 +79,12 @@ ui <- dashboardPage(
                     )
                     ),
             
-            # Barabasi-Albert sampling
+            # Barabasi-Albert sampling----
             tabItem(tabName = "model1",
                     fluidPage(
                         
                         tags$head(tags$style(".progress-bar{background-color:#00AC59;}")),
-                        
+  
                         # Style the sliders
                         tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #00AC59}")),
                         tags$style(HTML(".js-irs-1 .irs-single, .js-irs-1 .irs-bar-edge, .js-irs-1 .irs-bar {background: #00AC59}")),
@@ -135,7 +135,7 @@ ui <- dashboardPage(
                     )
             ),
             
-            # Watts-Strogatz sampling
+            # Watts-Strogatz sampling----
             tabItem(tabName = "model2",
                     fluidPage(
                         sidebarPanel(
@@ -160,7 +160,7 @@ ui <- dashboardPage(
                         )
                     )),
             
-            # Erdos-Renyi sampling
+            # Erdos-Renyi sampling----
             tabItem(tabName = "model3",
                     fluidPage(
                         sidebarPanel(
@@ -185,7 +185,7 @@ ui <- dashboardPage(
                     )
             ),
             
-            # Forest Fire sampling
+            # Forest Fire sampling----
             tabItem(tabName = "model4",
                     fluidPage(
                         sidebarPanel(
@@ -214,7 +214,7 @@ ui <- dashboardPage(
                     )
             ),
             
-            # Geometric random sampling
+            # Geometric random sampling----
             tabItem(tabName = "model5",
                     fluidPage(
                         sidebarPanel(
@@ -238,7 +238,7 @@ ui <- dashboardPage(
                     )
             ),
             
-            # Growing random sampling
+            # Growing random sampling----
             tabItem(tabName = "model6",
                     fluidPage(
                         sidebarPanel(
@@ -267,6 +267,7 @@ ui <- dashboardPage(
                         )
                     )
             ),
+            # Upload file----
             tabItem(tabName = "upload",
                     fluidPage(
                         sidebarPanel(
@@ -276,8 +277,8 @@ ui <- dashboardPage(
                               the log likelihood for the 6 network models and show you which model was most likely
                               to have generated your uploaded graph structure."),
                             fileInput("data", label = "", width = "400px",
-                                      buttonLabel = "Choose file",
-                                      placeholder = "adjacencyMatrix.txt"),
+                                      buttonLabel = "Browse",
+                                      placeholder = "No file selected"),
                             actionButton("upl", label = "Upload", 
                                          style="color: white; background-color: #00AA59; border-color: black",
                                          icon = icon("upload"))
@@ -288,10 +289,12 @@ ui <- dashboardPage(
                         )
                     )
             ),
+            # Info ----
             tabItem(tabName = "info",
                     column(12, align = "center", titlePanel("Information")),
                     fluidPage()
             ),
+            # Quiz----
             tabItem(tabName = "quiz",
                     column(12, align = "center", titlePanel("Quiz")),
                     fluidPage()
@@ -302,7 +305,7 @@ ui <- dashboardPage(
 
 server <- function(input, output) { 
     
-    ## Initialize Barabasi-Albert ##
+    ## Initialize Barabasi-Albert ----
     g1 <- igraph::sample_pa(n = 150, power = 1, m = 1, directed = FALSE)
     clusters1 <- igraph::spinglass.community(g1)$membership
     g1 <- igraph::get.adjacency(g1)
@@ -329,7 +332,7 @@ server <- function(input, output) {
         })
     })
     
-    ## Initialize Watts-Strogatz ##
+    ## Initialize Watts-Strogatz ----
     g2 <- igraph::sample_smallworld(dim = 1, size = 100, nei = 5, p = .1)
     clusters2 <- igraph::spinglass.community(g2)$membership
     g2 <- igraph::get.adjacency(g2)
@@ -355,7 +358,7 @@ server <- function(input, output) {
                                                      height = 700)
                      })
                  })
-    ## Initialize Erdos-Renyi ##
+    ## Initialize Erdos-Renyi ----
     g3 <- igraph::erdos.renyi.game(n = 150, p.or.m = 400, type = "gnm", directed = FALSE)
     # Some error handling
     p <- try({clusters3 <- igraph::spinglass.community(g3)$membership})
@@ -389,7 +392,7 @@ server <- function(input, output) {
                      })
                  })
     
-    ## Initialize Forest Fire model ##
+    ## Initialize Forest Fire model ----
     g4 <- igraph::sample_forestfire(nodes = 100, fw.prob=0.5, bw.factor=0.5,directed = FALSE)
     clusters4 <- spinglass.community(g4)$membership
     g4 <- igraph::get.adjacency(g4)
@@ -419,7 +422,7 @@ server <- function(input, output) {
                      })
                  })
     
-    ## Initialize Geometric random model ##
+    ## Initialize Geometric random model ----
     g5 <- sample_grg(nodes = 100, radius = 0.2, torus = FALSE)
     p5 <- try({clusters5 <- spinglass.community(g5)$membership})
     if (class(p5) == "try-error"){
@@ -454,7 +457,7 @@ server <- function(input, output) {
                      })
                  })
     
-    ## Initialize Growing random model ##
+    ## Initialize Growing random model ----
     g6 <- sample_growing(n = 100, m = 1, citation=FALSE, directed = FALSE)
     g6 <- igraph::get.adjacency(g6)
     diag(g6) <- 0
@@ -482,6 +485,7 @@ server <- function(input, output) {
                      })
                  })
     
+    # Upload file ----
     observeEvent(input$upl, {
         withProgress(message = 'Generating graph', value = 0, {
             incProgress(1/4)
