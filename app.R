@@ -771,9 +771,9 @@ server <- function(input, output) {
             incProgress(1/4)
             
             # Compute the loglikelihoods
-            erdos.renyi.logl <- sum(dbinom(degree, size = length(degree), prob = (1/length(degree)),log = TRUE))
-            barabasi.albert.logl <- igraph::fit_power_law(degree)$logLik
-            geometric.logl <- sum(dunif(degree, min = 0,max = length(degree),log = TRUE))
+            barabasi.albert.logl <- sum(log(degree^-3))
+            erdos.renyi.logl <- sum(log(dbinom(degree, (length(degree)-1), mean(datafile))))
+            geometric.logl <- sum(log(dgeom(degree, mean(datafile))))
             
             # Fill the table
             tab[1,2] <- barabasi.albert.logl
