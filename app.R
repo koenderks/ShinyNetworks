@@ -740,6 +740,7 @@ server <- function(input, output) {
     # Upload file ----
     observeEvent(input$upl, {
         withProgress(message = 'Generating graph', value = 0, {
+            
             incProgress(1/4)
             file <- input$data
             if (is.null(file)) {
@@ -747,7 +748,14 @@ server <- function(input, output) {
                 return(NULL)
             }
             datafile <- read.table(file$datapath)
-            output$graph <- renderPlot({qgraph::qgraph(datafile, labels = TRUE, bg = "gray94")})
+            datafile <- as.matrix(datafile)
+            
+            usergraph <- igraph::graph_from_adjacency_matrix(datafile)
+            t <- try({userclusters <- igraph::spinglass.community(usergraph)$membership})
+            if(class(t) == "try-error"){
+                userclusters <- NULL
+            }
+            output$graph <- renderPlot({qgraph::qgraph(datafile, labels = TRUE, bg = "gray94", color = userclusters)})
             
             incProgress(1/4)
             tab <- data.frame("Model" = c("Barabasi-Albert",
@@ -758,7 +766,6 @@ server <- function(input, output) {
                                           "Forest Fire"), 
                               "LogLikelihood" = rep(NA,6))
             
-            datafile <- as.matrix(datafile)
             # Extract degree distribution
             degree <- as.numeric(colSums(datafile))
             incProgress(1/4)
@@ -775,7 +782,6 @@ server <- function(input, output) {
             tab[4,2] <- geometric.logl
             tab[5,2] <- -Inf
             tab[6,2] <- -Inf
-            
             
             # Order according to higher likelihood
             tab <- tab[order(-tab$LogLikelihood),]
