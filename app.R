@@ -37,78 +37,70 @@ ui <- dashboardPage(
             tabItem(tabName = "overview",
                     column(12, align = "center", titlePanel(HTML('<font size="10">A selection of Network Models</font>'))),
                     fluidRow(
-                        column(4, align = "bottom", 
-                               box(
-                                   title = "Barabasi-Albert", status = "success", solidHeader = TRUE,
-                                   collapsible = FALSE,width = 10, 
-                                   img(src='model1.jpeg', align = "center",height = 300, width = 300),
-                                   class = "'right.Align"
-                               )),
-                        column(4, align = "bottom"
+                        box(
+                            title = "Barabasi-Albert model", status = "success", solidHeader = TRUE,
+                            collapsible = FALSE,width = 4, 
+                            img(src='model1.gif', align = "center",height = 300, width = 300)
+                            #,class = "'right.Align"
                         ),
-                        column(4, align = "bottom",
-                               box(
-                                   title = "Forest fire", status = "success", solidHeader = TRUE,
-                                   collapsible = FALSE,width = 10, 
-                                   img(src='model4.jpeg', align = "center",height = 300, width = 300)
-                               ))),
-                    fluidRow(
-                        column(4, align = "bottom",
-                               box(
-                                   title = "Geometric random graph", status = "success", solidHeader = TRUE,
-                                   collapsible = FALSE,width = 10, 
-                                   img(src='model5.jpeg', align = "center",height = 300, width = 300)
-                               )),
-                        column(4, align = "bottom"),
-                        column(4, align = "bottom",
-                               box(
-                                   title = "Growing random graph", status = "success", solidHeader = TRUE,
-                                   collapsible = FALSE,width = 10,
-                                   img(src='model6.jpeg', align = "center",height = 300, width = 300)
-                               ))
+                        box(
+                            title = "Forest fire model", status = "success", solidHeader = TRUE,
+                            collapsible = FALSE,width = 4, 
+                            img(src='model4.gif', align = "center",height = 300, width = 300)
+                        ),
+                        box(
+                            title = "Growing Random model", status = "success", solidHeader = TRUE,
+                            collapsible = FALSE,width = 4,
+                            img(src='model6.gif', align = "center",height = 300, width = 300)
+                        )
                     ),
                     fluidRow(
-                        column(4, align = "bottom",
-                               box(
-                                   title = "Erdos-Renyi", status = "success", solidHeader = TRUE,
-                                   collapsible = FALSE,width = 10,
-                                   img(src='model3.jpeg', align = "center",height = 300, width = 300)
-                               )),
-                        column(4, align = "botom"),
-                        column(4, align = "bottom",
-                               box(
-                                   title = "Watts-Strogatz", status = "success", solidHeader = TRUE,
-                                   collapsible = FALSE,width = 10, 
-                                   img(src='model2.jpeg', align = "center",height = 300, width = 300)
-                               ))
+                        box(
+                            title = "Geometric Random model", status = "success", solidHeader = TRUE,
+                            collapsible = FALSE,width = 4, 
+                            img(src='model5.gif', align = "center",height = 300, width = 300)
+                        ),
+                        box(
+                            title = "Erdos-Renyi model", status = "success", solidHeader = TRUE,
+                            collapsible = FALSE,width = 4,
+                            img(src='model3.gif', align = "center",height = 300, width = 300)
+                        ),
+                        box(
+                            title = "Watts-Strogatz model", status = "success", solidHeader = TRUE,
+                            collapsible = FALSE,width = 4, 
+                            img(src='model2.gif', align = "center",height = 300, width = 300)
+                        )
                     )
             ),
             
             # Barabasi-Albert sampling
             tabItem(tabName = "model1",
                     fluidPage(
+                        
+                        tags$head(tags$style(".progress-bar{background-color:#00cc00;}")),
+                        
                         fluidRow(
                             sidebarPanel(h1("Barabasi-Albert model"),
-                                sliderInput(
-                                    "n", 
-                                    "Number of vertices",
-                                    min = 10, max = 200, step = 1, value = 100, width = 400
-                                ),
-                                sliderInput(
-                                    "power", 
-                                    "Power",
-                                    min = 0, max = 10, step = .25, value = 1, width = 400
-                                ),
-                                sliderInput(
-                                    "m", 
-                                    "Edges added per time step",
-                                    min = 1, max = 10, step = 1, value = 1, width = 400
-                                ),
-                                checkboxInput(
-                                    "directed1",
-                                    "Directed graph"
-                                ),
-                                actionButton('sample1', 'Resample')
+                                         sliderInput(
+                                             "n", 
+                                             "Number of vertices",
+                                             min = 10, max = 200, step = 1, value = 100, width = 400
+                                         ),
+                                         sliderInput(
+                                             "power", 
+                                             "Power",
+                                             min = 0, max = 10, step = .25, value = 1, width = 400
+                                         ),
+                                         sliderInput(
+                                             "m", 
+                                             "Edges added per time step",
+                                             min = 1, max = 10, step = 1, value = 1, width = 400
+                                         ),
+                                         checkboxInput(
+                                             "directed1",
+                                             "Directed graph"
+                                         ),
+                                         actionButton('sample1', 'Resample')
                             ),
                             mainPanel(
                                 withSpinner(plotOutput("BAplot"),type = 6, color = "green")
@@ -120,10 +112,8 @@ ui <- dashboardPage(
             # Watts-Strogatz sampling
             tabItem(tabName = "model2",
                     fluidPage(
-                        
-                        tags$head(tags$style(".progress-bar{background-color:#00cc00;}")),
-                        
-                        sidebarPanel(h1("Watts-Strogatz model"),
+                        sidebarPanel(
+                            h1("Watts-Strogatz model"),
                             sliderInput(
                                 "size", "Size",
                                 min = 10, max = 200, step = 1, value = 100),
@@ -145,7 +135,8 @@ ui <- dashboardPage(
             # Erdos-Renyi sampling
             tabItem(tabName = "model3",
                     fluidPage(
-                        sidebarPanel(h1("Erdos-Renyi model"),
+                        sidebarPanel(
+                            h1("Erdos-Renyi model"),
                             sliderInput(
                                 "vertices", "Number of vertices",
                                 min = 10, max = 200, step = 1, value = 150),
@@ -167,7 +158,8 @@ ui <- dashboardPage(
             # Forest Fire sampling
             tabItem(tabName = "model4",
                     fluidPage(
-                        sidebarPanel(h1("Forest Fire model"),
+                        sidebarPanel(
+                            h1("Forest Fire model"),
                             sliderInput(
                                 "nodes", "Number of nodes",
                                 min = 10, max = 200, step = 1, value = 100),
@@ -193,7 +185,8 @@ ui <- dashboardPage(
             # Geometric random sampling
             tabItem(tabName = "model5",
                     fluidPage(
-                        sidebarPanel(h1("Geometric Random model"),
+                        sidebarPanel(
+                            h1("Geometric Random model"),
                             sliderInput(
                                 "node", "Number of nodes",
                                 min = 0, max = 200, step = 1, value = 100),
@@ -214,7 +207,8 @@ ui <- dashboardPage(
             # Growing random sampling
             tabItem(tabName = "model6",
                     fluidPage(
-                        sidebarPanel(h1("Growing Random model"),
+                        sidebarPanel(
+                            h1("Growing Random model"),
                             sliderInput(
                                 "vertices", "Number of vertices",
                                 min = 10, max = 200, step = 1, value = 100),
@@ -237,17 +231,28 @@ ui <- dashboardPage(
                         )
                     )
             ),
+            tabItem(tabName = "upload",
+                    fluidPage(
+                        sidebarPanel(
+                            h1("Upload Adjacency matrix"),
+                            fileInput("data", label = "", width = "400px",
+                                      buttonLabel = "Choose file",
+                                      placeholder = "adjacencyMatrix.txt"),
+                            actionButton("upl", label = "Upload")
+                        ),
+                        mainPanel(
+                            plotOutput("graph"),
+                            tableOutput("result")
+                        )
+                    )
+            ),
             tabItem(tabName = "info",
                     column(12, align = "center", titlePanel("Information")),
-                    fluidRow()
-            ),
-            tabItem(tabName = "upload",
-                    column(12, align = "center", titlePanel("Upload Data")),
-                    fluidRow()
+                    fluidPage()
             ),
             tabItem(tabName = "quiz",
                     column(12, align = "center", titlePanel("Quiz")),
-                    fluidRow()
+                    fluidPage()
             )
         )
     )
@@ -327,7 +332,7 @@ server <- function(input, output) {
                      withProgress(message = 'Generating graph', value = 0, {
                          g3 <- igraph::erdos.renyi.game(n = input$vertices, p.or.m = input$edges, type = "gnm", directed = input$directed3)
                          incProgress(1/3)
-                         p3 <- try({clusters3 <- spinglass.community(g3)$membership})
+                         p3 <- try({clusters3 <- igraph::spinglass.community(g3)$membership})
                          if(class(p3) == "try-error"){
                              clusters3 <- "black" 
                          }
@@ -380,10 +385,10 @@ server <- function(input, output) {
     }
     g5 <- igraph::get.adjacency(g5)
     output$RGGplot <- renderPlot({qgraph::qgraph(g5, color = clusters5, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
-                                                border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
-                                                bg = "gray94", borders = FALSE)},
-                                width = 950, 
-                                height = 700
+                                                 border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
+                                                 bg = "gray94", borders = FALSE)},
+                                 width = 950, 
+                                 height = 700
     )
     ## Resample when button is pressed ##
     observeEvent(input$sample5,
@@ -432,6 +437,28 @@ server <- function(input, output) {
                          )
                      })
                  })
+    
+    observeEvent(input$upl, {
+        withProgress(message = 'Generating graph', value = 0, {
+            incProgress(1/3)
+            file <- input$data
+            if (is.null(file)) {
+                # No file has been uploaded
+                return(NULL)
+            }
+            incProgress(1/3)
+            datafile <- read.table(file$datapath)
+            output$graph <- renderPlot({qgraph::qgraph(datafile, labels = TRUE, bg = "gray94")})
+            
+            incProgress(1/3)
+            tab <- data.frame("Model" = c("Barabasi-Albert","Erdos-Renyi", "Watts-Strogatz", "Geometric Random", "Growing Random", "Forest Fire"), "Likelihood" = rep(0,6))
+            
+            # Fill the table here
+            
+            tab <- tab[order(tab$Likelihood),]
+            output$result <- renderTable(tab)
+        })
+    })
     
 }
 
