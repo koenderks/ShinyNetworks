@@ -10,7 +10,6 @@ ui <- dashboardPage(
     
     skin = "green",
     
-    #dashboardHeader(title = "Shiny Networks"),
     dashboardHeader(title = "Untangling the Growing Network Web",titleWidth = 400),
     
     # Menu options----
@@ -37,6 +36,9 @@ ui <- dashboardPage(
             # Homepage----
             tabItem(tabName = "overview",
                     #column(12, align = "center", titlePanel(HTML('<font size="6">Untangling the Growing Network Web</font>'))),
+                    br(),
+                    br(),
+                    br(),
                     fluidRow(
                         column( 4, align = "bottom",
                                 box(
@@ -56,7 +58,7 @@ ui <- dashboardPage(
                                     collapsible = FALSE,width = 10,
                                     img(src = 'model1.gif', height = 250, width = 350, align = "center")
                                 ))),
-                    
+                    br(),
                     fluidRow(
                         column( 4, align = "bottom",
                                 box(
@@ -78,14 +80,24 @@ ui <- dashboardPage(
                                     
                                 ))
                     )
-                    ),
+            ),
             
             # Barabasi-Albert sampling----
             tabItem(tabName = "model1",
                     fluidPage(
                         
+                        # Style----
+                        # Set the progress bar colors
                         tags$head(tags$style(".progress-bar{background-color:#00AC59;}")),
-  
+                        
+                        # Center box headers
+                        tags$head(tags$style(HTML("
+
+                                                  div.box-header {
+                                                  text-align: center;
+                                                  }
+                                                  "))),
+                        
                         # Style the sliders
                         tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #00AC59}")),
                         tags$style(HTML(".js-irs-1 .irs-single, .js-irs-1 .irs-bar-edge, .js-irs-1 .irs-bar {background: #00AC59}")),
@@ -106,6 +118,12 @@ ui <- dashboardPage(
                         
                         fluidRow(
                             sidebarPanel(h1("Barabasi-Albert model"),
+                                         p("The Barabasi-Albert model is an algorithm for 
+                                           generating random scale-free networks using a preferential 
+                                           attachment mechanism. It incorporates two important general concepts: 
+                                           growth and preferential attachment. Growth means that the number of nodes in the 
+                                           network increases over time. Preferential attachment means that the more connected a node is, the more 
+                                           likely it is to receive new links."),
                                          sliderInput(
                                              "n", 
                                              "Number of vertices",
@@ -141,6 +159,8 @@ ui <- dashboardPage(
                     fluidPage(
                         sidebarPanel(
                             h1("Watts-Strogatz model"),
+                            p("The Watts-Strogatz model is a random graph generation model that produces graphs with small-world properties, 
+                      including short average path lengths and high clustering."),
                             sliderInput(
                                 "size", "Size",
                                 min = 10, max = 200, step = 1, value = 100),
@@ -166,6 +186,9 @@ ui <- dashboardPage(
                     fluidPage(
                         sidebarPanel(
                             h1("Erdos-Renyi model"),
+                            p("The Erdos-Renyi model is an algorithm for generating random graphs. In this model 
+                            all graphs on a fixed vertex set with a fixed number of edges are equally likely to occur. Because of
+                              this property, the Erdos-Renyi model produces graphs with few clusters."),
                             sliderInput(
                                 "vertices", "Number of vertices",
                                 min = 10, max = 200, step = 1, value = 150),
@@ -191,6 +214,8 @@ ui <- dashboardPage(
                     fluidPage(
                         sidebarPanel(
                             h1("Forest Fire model"),
+                            p("The Forest Fire model is an algorithm for generating scale-free graphs. The graphs generated
+                              by this model display a high degree of self-organization."),
                             sliderInput(
                                 "nodes", "Number of nodes",
                                 min = 10, max = 200, step = 1, value = 100),
@@ -220,6 +245,9 @@ ui <- dashboardPage(
                     fluidPage(
                         sidebarPanel(
                             h1("Geometric Random model"),
+                            p("The random geometric graph model represents the simplest network possible, namely one constructed by 
+                              randomly placing nodes in a space and connecting two nodes only if their distance is in a given range. Because of
+                              this method, random graphs have the possibility to create clusters."),
                             sliderInput(
                                 "node", "Number of nodes",
                                 min = 0, max = 200, step = 1, value = 100),
@@ -244,6 +272,9 @@ ui <- dashboardPage(
                     fluidPage(
                         sidebarPanel(
                             h1("Growing Random model"),
+                            p("The Growing Random model is an algorithm for generating random graphs.
+                              It is a discrete time step model, meaning that in each time step a new vertex is added to the graph 
+                              and several new edges are created."),
                             sliderInput(
                                 "vertices", "Number of vertices",
                                 min = 10, max = 200, step = 1, value = 100),
@@ -291,89 +322,10 @@ ui <- dashboardPage(
                     )
             ),
             # Info ----
-            tabItem((tabName = "quiz",
-                    column(12, align = "center", titlePanel("Test Your Knowledge")),
-                fluidPage(
-                    fluidRow(
-                      #infoBox(title = "Question 1", value = "What does this graph represent?", 
-                      #withSpinner(plotOutput("quizPlot1", height = 200), type = 6),
-                      #   imageOutput("quizPlot1"),
-                      #   icon = icon("question")),
-                      column(width = 6,
-                             box(img(src='quizPlot1.jpeg', align = "center", height = 207,
-                                     width = 220), status = "primary",
-                                 width = NULL, background = "light-blue")),
-                      column(width = 6,
-                             box(title = "Question 1",
-                                 radioButtons(
-                                   "graph_id",
-                                   "What type of graph is displayed here?",
-                                   c("Erdos-Renyi" = "erdos",
-                                     "Barabasi-Albert model" = "barab",
-                                     "Forest Fire model" = "forest",
-                                     "Watts-Strogatz" = "watts"
-                                   )
-                                 ), actionButton("submit1", "Check"),
-                                 status = "primary", width = NULL, solidHeader = TRUE)
-                      )),
-                    fluidRow(
-                      box(title = "Question 2",
-                          radioButtons(
-                            "usage",
-                            "What do modern random graphs allow us to do?",
-                            c("Give us exact answers to complex questions." = "1",
-                              "Find out about statistical properties of large graphs." = "2",
-                              "Show the interconnectedness of all things." = "3")
-                          ), actionButton("submit2", "Check"),
-                          status = "primary", width = 12, solidHeader = TRUE)
-                    ),
-                    fluidRow(
-                      column(width = 6,
-                             box(title = "Question 3a",
-                                 radioButtons(
-                                   "barabasi",
-                                   "What might one use the Barabasi-Albert model to explain?",
-                                   c("World Wide Web" = "1", 
-                                     "Social Networks" = "2",
-                                     "Citation Networks" = "3")
-                                 ), actionButton("submit3", "Check"), 
-                                 status = "primary", height = 250, width = NULL, solidHeader = TRUE)
-                      ),
-                      column(width = 6,
-                             box(title = "Question 3b",
-                                 radioButtons(
-                                   "barabasi2",
-                                   "What is true about this model?",
-                                   c("It has a power-law degree distribution" = "1",
-                                     "It does not include preferential attachment" = "2",
-                                     "The number of its nodes decrease over time" = "3",
-                                     "The algorithm creates all included nodes simultaneously" = "4")
-                                 ), 
-                                 actionButton("submit4", "Check"),
-                                 status = "primary", width = NULL, solidHeader = TRUE)
-                      )),
-                    fluidRow(
-                      column(width = 6,
-                             box(title = "Question 4",
-                                 radioButtons(
-                                   "fire",
-                                   "What model might the Gif on the right illustrate?",
-                                   c("Erdos-Renyi" = "erdos",
-                                     "Random Graph model" = "random",
-                                     "Forest Fire model" = "forest",
-                                     "Watts-Strogatz" = "watts")
-                                 ),
-                                 actionButton("submit5", "Check"),
-                                 status = "primary", width = NULL, solidHeader = TRUE
-                                 )),
-                      column(width = 6,
-                             box(img(src='forest_fire_model.gif', align = "center", height = 225,
-                                     width = 220), status = "primary",
-                                 width = NULL, background = "light-blue"))
-                    )
-                    
-                )
-                ),
+            tabItem(tabName = "info",
+                    column(12, align = "center", titlePanel("Information")),
+                    fluidPage()
+            ),
             # Quiz----
             tabItem(tabName = "quiz",
                     column(12, align = "center", titlePanel("Quiz")),
@@ -605,70 +557,30 @@ server <- function(input, output) {
             output$graph <- renderPlot({qgraph::qgraph(datafile, labels = TRUE, bg = "gray94")})
             
             incProgress(1/4)
-            tab <- data.frame("Model" = c("Barabasi-Albert","Erdos-Renyi", "Watts-Strogatz", "Geometric Random", "Growing Random", "Forest Fire"), "LogLikelihood" = rep(NA,6))
-
+            tab <- data.frame("Model" = c("Barabasi-Albert",
+                                          "Erdos-Renyi", 
+                                          "Watts-Strogatz", 
+                                          "Geometric Random", 
+                                          "Growing Random", 
+                                          "Forest Fire"), 
+                              "LogLikelihood" = rep(NA,6))
+            
             datafile <- as.matrix(datafile)
             # Extract degree distribution
             degree <- as.numeric(colSums(datafile))
             incProgress(1/4)
-
+            
             # Compute the loglikelihoods
             erdos.renyi.logl <- sum(dbinom(degree, size = length(degree), prob = (1/length(degree)),log = TRUE))
             barabasi.albert.logl <- igraph::fit_power_law(degree)$logLik
             # Fill the table
             tab[1,2] <- barabasi.albert.logl
             tab[2,2] <- erdos.renyi.logl
-
+            
             # Order according to higher likelihood
             tab <- tab[order(-tab$LogLikelihood),]
             output$result <- renderTable(tab)
         })
-    })
-    
-    # quizResponses ----
-    
-    correctResp <- c("Correct! Well done!", "Super!", "Great job!", "Your answer is right!", "You're amazing")
-    wrongResp <- c("Not quite right, try again!", "Not quite, maybe try another answer!", 
-                   "That is not the right answer.", "You might want to rethink your answer.")
-      
-    observeEvent(input$submit1, {
-      if (input$graph_id == "erdos") {
-        showNotification(sample(wrongResp, 1), type = "message")
-      } else if (input$graph_id == "barab") {
-        showNotification(sample(wrongResp, 1), type = "message")
-      } else if (input$graph_id == "forest") {
-        showNotification(sample(wrongResp, 1), type = "message")
-      } else {
-        showNotification(sample(correctResp, 1), type = "message")
-      }
-    })
-    
-    observeEvent(input$submit2, {
-      if (input$usage == "1" | input$usage == "3") {
-        showNotification(sample(wrongResp, 1), type = "message")
-      } else {
-        showNotification(sample(correctResp, 1), type = "message")
-      } 
-    })
-    
-    observeEvent(input$submit3, {
-      showNotification("Good answer - actually, all response options are correct here.", type = "message")
-    })
-    
-    observeEvent(input$submit4, {
-      if (input$barabasi2 == "2" | input$barabasi2 == "3" | input$barabasi2 == "4") {
-        showNotification(sample(wrongResp, 1), type = "message")
-      } else {
-        showNotification(sample(correctResp, 1), type = "message")
-      } 
-    })
-    
-    observeEvent(input$submit5, {
-      if (input$fire == "forest") {
-        showNotification(sample(correctResp, 1), type = "message")
-      } else {
-        showNotification(sample(wrongResp, 1), type = "message")
-      }
     })
     
 }
