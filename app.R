@@ -328,9 +328,93 @@ ui <- dashboardPage(
                     )
             ),
             # Info ----
-            tabItem(tabName = "info",
-                    column(12, align = "center", titlePanel("Information")),
-                    fluidPage()
+            tabItem((tabName = "info",
+                    column(12, align = "center", 
+                           titlePanel(HTML('<font size="10" face = "Impact">Background Information</font>'))),
+                    fluidPage(
+                      column( width = 5,
+                              fluidRow(
+                                box(title = "RANDOM NETWORKS",
+                                    "A random graph is obtained by randomly sampling from a collection of graphs.
+                                    Early random graphs, in contrast to free-scale graphs, start with a vertex (representing isolated
+                                    nodes) and select, at random, edges not yet chosen.",
+                                    width = NULL, status = "warning", solidHeader = TRUE)
+                              ),
+                              fluidRow(
+                                box(title = "Erdos-Renyi Model", 
+                                    "- Introduced in 1959 by mathematicians Paul Erdos and Alfred Renyi", 
+                                    br(),
+                                    "- It is a random graph",
+                                    br(),
+                                    "- A fixed vertex with a fixed number of edges",
+                                    width = NULL, status = "primary", solidHeader = TRUE)
+                              ),
+                              fluidRow(
+                                box(title = "Wattz Stogatz Model",
+                                    "- Random Graph generation model",
+                                    br(),
+                                    "- Builds on Erdos-Renyi Model - small world",
+                                    br(),
+                                    "- Short average path length, high clustering",
+                                    br(),
+                                    "- Does not account for formation of hubs",
+                                    width = NULL, status = "primary", solidHeader = TRUE)
+                              ),
+                              fluidRow(
+                                box(title = "Random Geometric Graph (RGG)",
+                                    "- Mathimatically this is the simplest spatial network",
+                                    br(),
+                                    "- It is an undirected graph (directionality of the nodes is unimportant)",
+                                    br(),
+                                    "- Places n nodes randomly in some metric space",
+                                    width = NULL, status = "primary", solidHeader = TRUE)
+                              ),
+                              fluidRow(
+                                box(title = "Growing Random Model",
+                                    "- Each vertex mapped is assigned random coordinates in a geometric space of 
+                                    arbitrary dimensionality",
+                                    br(),
+                                    "- It only includes edges between adjacent points",
+                                    width = NULL, status = "primary", solidHeader = TRUE)
+                              )
+                      ),
+                      column(width = 4,
+                             img(src='overview.png', align = "centre", height = 690,
+                                 width = 390)
+                      ),
+                      column(width = 3,
+                             fluidRow(
+                               box(title = "SCALE-FREE NETWORKS",
+                                   "Scale-free networks, also called power-law networks or free-scale
+                                   networks, are those whose degree distribution is based on a power-law.
+                                   In other words, the number of edges a node has is linked to the number 
+                                   of edges nodes which this node is connected to have. Thus, a new node is likely
+                                   to be connected to an already well connected node.",
+                                   width = NULL, status = "warning", solidHeader = TRUE)
+                             ),
+                             fluidRow(
+                                 box(title = "Barabasi Albert Model",
+                                     "- Generates random, free scale models",
+                                     br(),
+                                     "- Preferential Attachment - popular nodes to   popular nodes",
+                                     br(),
+                                     "- Based on a power law (free scale) distribution",
+                                     width = NULL, status = "primary", solidHeader = TRUE)
+                               ),
+                             fluidRow(
+                               box(title = "Forest Fire Model",
+                                   "- Dynamic system based on a high degree of self-  organisation",
+                                   br(),
+                                   "- May arise from a combination of the following examplary components:",
+                                   br(),
+                                   "    - Rich-get-richer process - leads to heavy-tailed   in-degrees",
+                                   br(),
+                                   "    - Community Guided Attachment (difficulty of   forming an attachment 
+                                   between communities increases with size of community) ",
+                                   width = NULL, status = "primary", solidHeader = TRUE)
+                             )
+                      )
+                    )
             ),
             # Quiz----
             tabItem(tabName = "quiz",
