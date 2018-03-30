@@ -312,8 +312,8 @@ ui <- dashboardPage(
                             h1("Upload Adjacency matrix"),
                             p("In this tab you can upload an adjacency matrix in a .txt file. The program will
                               create a graph corresponding to the uploaded matrix. It will then move on to compute
-                              the log likelihood for all network models (except the Forest Fire model) and show you which model was most likely
-                              to have generated your uploaded graph structure."),
+                              the log likelihood for the Barabasi-Albert, Erdos-Renyi, Geometric Random and Growing Random models 
+                              and show you which model was most likely to have generated your uploaded graph structure."),
                             fileInput("data", label = "", width = "400px",
                                       buttonLabel = "Browse",
                                       placeholder = "No file selected"),
@@ -329,93 +329,93 @@ ui <- dashboardPage(
             ),
             # Info ----
             tabItem(tabName = "info",
-                     column(12, align = "center", 
-                            titlePanel(HTML('<font size="10" face = "Impact">Background Information</font>'))),
-                     fluidPage(
-                         column( width = 5,
-                                 fluidRow(
-                                     box(title = "RANDOM NETWORKS",
-                                         "A random graph is obtained by randomly sampling from a collection of graphs.
+                    column(12, align = "center", 
+                           titlePanel(HTML('<font size="10" face = "Impact">Background Information</font>'))),
+                    fluidPage(
+                        column( width = 5,
+                                fluidRow(
+                                    box(title = "RANDOM NETWORKS",
+                                        "A random graph is obtained by randomly sampling from a collection of graphs.
                                          Early random graphs, in contrast to free-scale graphs, start with a vertex (representing isolated
                                          nodes) and select, at random, edges not yet chosen.",
-                                         width = NULL, status = "warning", solidHeader = TRUE)
-                                 ),
-                                 fluidRow(
-                                     box(title = "Erdos-Renyi Model", 
-                                         "- Introduced in 1959 by mathematicians Paul Erdos and Alfred Renyi", 
-                                         br(),
-                                         "- It is a random graph",
-                                         br(),
-                                         "- A fixed vertex with a fixed number of edges",
-                                         width = NULL, status = "primary", solidHeader = TRUE)
-                                 ),
-                                 fluidRow(
-                                     box(title = "Wattz Stogatz Model",
-                                         "- Random Graph generation model",
-                                         br(),
-                                         "- Builds on Erdos-Renyi Model - small world",
-                                         br(),
-                                         "- Short average path length, high clustering",
-                                         br(),
-                                         "- Does not account for formation of hubs",
-                                         width = NULL, status = "primary", solidHeader = TRUE)
-                                 ),
-                                 fluidRow(
-                                     box(title = "Random Geometric Graph (RGG)",
-                                         "- Mathimatically this is the simplest spatial network",
-                                         br(),
-                                         "- It is an undirected graph (directionality of the nodes is unimportant)",
-                                         br(),
-                                         "- Places n nodes randomly in some metric space",
-                                         width = NULL, status = "primary", solidHeader = TRUE)
-                                 ),
-                                 fluidRow(
-                                     box(title = "Growing Random Model",
-                                         "- Each vertex mapped is assigned random coordinates in a geometric space of 
-                                         arbitrary dimensionality",
-                                         br(),
-                                         "- It only includes edges between adjacent points",
-                                         width = NULL, status = "primary", solidHeader = TRUE)
-                                 )
-                         ),
-                         column(width = 4,
-                                img(src='overview.png', align = "centre", height = 690,
-                                    width = 390)
-                         ),
-                         column(width = 3,
+                                        width = NULL, status = "warning", solidHeader = TRUE)
+                                ),
                                 fluidRow(
-                                    box(title = "SCALE-FREE NETWORKS",
-                                        "Scale-free networks, also called power-law networks or free-scale
+                                    box(title = "Erdos-Renyi Model", 
+                                        "- Introduced in 1959 by mathematicians Paul Erdos and Alfred Renyi", 
+                                        br(),
+                                        "- It is a random graph",
+                                        br(),
+                                        "- A fixed vertex with a fixed number of edges",
+                                        width = NULL, status = "primary", solidHeader = TRUE)
+                                ),
+                                fluidRow(
+                                    box(title = "Wattz Stogatz Model",
+                                        "- Random Graph generation model",
+                                        br(),
+                                        "- Builds on Erdos-Renyi Model - small world",
+                                        br(),
+                                        "- Short average path length, high clustering",
+                                        br(),
+                                        "- Does not account for formation of hubs",
+                                        width = NULL, status = "primary", solidHeader = TRUE)
+                                ),
+                                fluidRow(
+                                    box(title = "Random Geometric Graph (RGG)",
+                                        "- Mathimatically this is the simplest spatial network",
+                                        br(),
+                                        "- It is an undirected graph (directionality of the nodes is unimportant)",
+                                        br(),
+                                        "- Places n nodes randomly in some metric space",
+                                        width = NULL, status = "primary", solidHeader = TRUE)
+                                ),
+                                fluidRow(
+                                    box(title = "Growing Random Model",
+                                        "- Each vertex mapped is assigned random coordinates in a geometric space of 
+                                         arbitrary dimensionality",
+                                        br(),
+                                        "- It only includes edges between adjacent points",
+                                        width = NULL, status = "primary", solidHeader = TRUE)
+                                )
+                        ),
+                        column(width = 4,
+                               img(src='overview.png', align = "centre", height = 690,
+                                   width = 390)
+                        ),
+                        column(width = 3,
+                               fluidRow(
+                                   box(title = "SCALE-FREE NETWORKS",
+                                       "Scale-free networks, also called power-law networks or free-scale
                                         networks, are those whose degree distribution is based on a power-law.
                                         In other words, the number of edges a node has is linked to the number 
                                         of edges nodes which this node is connected to have. Thus, a new node is likely
                                         to be connected to an already well connected node.",
-                                        width = NULL, status = "warning", solidHeader = TRUE)
-                                ),
-                                fluidRow(
-                                    box(title = "Barabasi Albert Model",
-                                        "- Generates random, free scale models",
-                                        br(),
-                                        "- Preferential Attachment - popular nodes to   popular nodes",
-                                        br(),
-                                        "- Based on a power law (free scale) distribution",
-                                        width = NULL, status = "primary", solidHeader = TRUE)
-                                ),
-                                fluidRow(
-                                    box(title = "Forest Fire Model",
-                                        "- Dynamic system based on a high degree of self-  organisation",
-                                        br(),
-                                        "- May arise from a combination of the following examplary components:",
-                                        br(),
-                                        "    - Rich-get-richer process - leads to heavy-tailed   in-degrees",
-                                        br(),
-                                        "    - Community Guided Attachment (difficulty of   forming an attachment 
+                                       width = NULL, status = "warning", solidHeader = TRUE)
+                               ),
+                               fluidRow(
+                                   box(title = "Barabasi Albert Model",
+                                       "- Generates random, free scale models",
+                                       br(),
+                                       "- Preferential Attachment - popular nodes to   popular nodes",
+                                       br(),
+                                       "- Based on a power law (free scale) distribution",
+                                       width = NULL, status = "primary", solidHeader = TRUE)
+                               ),
+                               fluidRow(
+                                   box(title = "Forest Fire Model",
+                                       "- Dynamic system based on a high degree of self-  organisation",
+                                       br(),
+                                       "- May arise from a combination of the following examplary components:",
+                                       br(),
+                                       "    - Rich-get-richer process - leads to heavy-tailed   in-degrees",
+                                       br(),
+                                       "    - Community Guided Attachment (difficulty of   forming an attachment 
                                         between communities increases with size of community) ",
-                                        width = NULL, status = "primary", solidHeader = TRUE)
-                                )
-                                )
-                                    )
-                         ),
+                                       width = NULL, status = "primary", solidHeader = TRUE)
+                               )
+                        )
+                    )
+            ),
             # Quiz----
             tabItem(tabName = "quiz",
                     fluidPage(
@@ -603,6 +603,28 @@ ui <- dashboardPage(
 )
 
 server <- function(input, output) { 
+    
+    ## Helper function----
+    growing <- function(db, delta){
+        delta <- seq(0.05,.95,by = .005)
+        likelihood <- NULL
+        output <- list()
+        for(j in 1:length(delta)){
+            temp <- NULL
+            for(i in 1:length(db)){
+                temp[i] <- ((2*delta[j])^db[i])/((1+2*delta[j])^(db[i]+1))
+            }
+            likelihood[j] <- sum(temp)
+            output[[j]] <- temp
+        }
+        likelihood <- log(likelihood)
+        for(l in 1:length(likelihood)){
+            if(likelihood[l] == max(likelihood)){
+                final <- output[[l]]
+            }
+        }
+        return(final)
+    }
     
     ## Initialize Barabasi-Albert ----
     g1 <- igraph::sample_pa(n = 150, power = 1, m = 1, directed = FALSE)
@@ -831,27 +853,29 @@ server <- function(input, output) {
                 # No file has been uploaded
                 return(NULL)
             }
-            datafile <- read.table(file$datapath)
+            datafile <- read.table(file$datapath, header = TRUE)
             datafile <- as.matrix(datafile)
+            diag(datafile) <- 0
             
             usergraph <- igraph::graph_from_adjacency_matrix(datafile)
             t <- try({userclusters <- igraph::spinglass.community(usergraph)$membership})
             if(class(t) == "try-error"){
                 userclusters <- NULL
             }
-            output$graph <- renderPlot({qgraph::qgraph(datafile, labels = TRUE, bg = "gray94", color = userclusters)})
             
             incProgress(1/4)
             tab <- data.frame("Model" = c("Barabasi-Albert",
-                                          "Erdos-Renyi", 
-                                          "Watts-Strogatz", 
+                                          "Erdos-Renyi",
                                           "Geometric Random", 
                                           "Growing Random"), 
-                              "LogLikelihood" = rep(NA,5))
+                              "LogLikelihood" = rep(NA,4))
             
             # Extract degree distribution
             graphobject <- igraph::graph_from_adjacency_matrix(datafile)
             degree <- igraph::degree(graphobject, mode = "in")
+            
+            output$graph <- renderPlot({qgraph::qgraph(datafile, labels = TRUE, directed = FALSE,
+                                                       bg = "gray94", color = userclusters)})
             
             incProgress(1/4)
             
@@ -859,18 +883,19 @@ server <- function(input, output) {
             barabasi.albert.logl <- sum(log(degree^-3))
             erdos.renyi.logl <- sum(log(dbinom(degree, (length(degree)-1), mean(datafile))))
             geometric.logl <- sum(log(dgeom(degree, mean(datafile))))
-            growing.logl <- sum(log(degree/(2*length(degree))))
-            watts.logl <- -Inf 
+            growing.logl <- sum(log(growing(degree)))
             
             # Fill the table
             tab[1,2] <- barabasi.albert.logl
             tab[2,2] <- erdos.renyi.logl
-            tab[3,2] <- watts.logl
-            tab[4,2] <- geometric.logl
-            tab[5,2] <- growing.logl
+            tab[3,2] <- geometric.logl
+            tab[4,2] <- growing.logl
+            
+            tab[which(tab[,2] == Inf | tab[,2] == -Inf), 2] <- -Inf
             
             # Order according to higher likelihood
             tab <- tab[order(-tab$LogLikelihood),]
+            tab[which(tab[,2] == -Inf), 2] <- "Not computable"
             output$result <- renderTable(tab)
         })
     })
