@@ -26,7 +26,8 @@ ui <- dashboardPage(
                      menuSubItem("Growing Random model", tabName = "model6"),
                      menuSubItem("Forest Fire model", tabName = "model4")),
             menuItem("Upload Data", tabName = "upload", icon = icon("upload")),
-            menuItem("Quiz",tabName = "quiz", icon = icon("question-circle"))
+            menuItem("Quiz",tabName = "quiz", icon = icon("question-circle")),
+            menuItem("Developers",tabName = "developers", icon = icon("users"))
         )
     ),
     
@@ -222,10 +223,10 @@ ui <- dashboardPage(
                                 min = 10, max = 200, step = 1, value = 100),
                             sliderInput(
                                 "probfor", "Burning forward probability",
-                                min = 0, max = 1, step = 0.1, value = .5),
+                                min = 0, max = 1, step = 0.01, value = .5),
                             sliderInput(
                                 "probback", "Burning backwards probability",
-                                min = 0, max = 1, step = 0.1, value = .5),
+                                min = 0, max = 1, step = 0.01, value = .5),
                             checkboxInput(
                                 "directed4",
                                 "Directed graph"
@@ -435,6 +436,9 @@ ui <- dashboardPage(
                                    ))
                         )
                     )
+            ),
+            tabItem(tabName = "developers",
+                    fluidPage()
             )
         )
     )
@@ -572,12 +576,22 @@ server <- function(input, output) {
                          incProgress(1/3)
                          g4 <- igraph::get.adjacency(g4)
                          incProgress(1/3)
-                         output$FFplot <- renderPlot({qgraph::qgraph(g4, color = clusters4, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
-                                                                     border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
-                                                                     bg = "gray94", borders = FALSE)},
-                                                     width = 950, 
-                                                     height = 700
-                         )
+                         if(input$nodes == 64 && input$probfor == .64 && input$probback == .64){
+                             output$FFplot <- renderImage({
+                                 return(list(
+                                     src = "www/group.jpg",
+                                     contentType = "image/jpg",
+                                     alt = "The developers being weird"
+                                 ))
+                             },deleteFile = FALSE)
+                         } else {
+                             output$FFplot <- renderPlot({qgraph::qgraph(g4, color = clusters4, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+                                                                         border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
+                                                                         bg = "gray94", borders = FALSE)},
+                                                         width = 950, 
+                                                         height = 700
+                             )
+                         }
                      })
                  })
     
