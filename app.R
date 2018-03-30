@@ -83,7 +83,25 @@ ui <- dashboardPage(
             tabItem(tabName = "model1",
                     fluidPage(
                         
-                        tags$head(tags$style(".progress-bar{background-color:#00cc00;}")),
+                        tags$head(tags$style(".progress-bar{background-color:#00AC59;}")),
+                        
+                        # Style the sliders
+                        tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-1 .irs-single, .js-irs-1 .irs-bar-edge, .js-irs-1 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-2 .irs-single, .js-irs-2 .irs-bar-edge, .js-irs-2 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-3 .irs-single, .js-irs-3 .irs-bar-edge, .js-irs-3 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-4 .irs-single, .js-irs-4 .irs-bar-edge, .js-irs-4 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-5 .irs-single, .js-irs-5 .irs-bar-edge, .js-irs-5 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-6 .irs-single, .js-irs-6 .irs-bar-edge, .js-irs-6 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-7 .irs-single, .js-irs-7 .irs-bar-edge, .js-irs-7 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-8 .irs-single, .js-irs-8 .irs-bar-edge, .js-irs-8 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-9 .irs-single, .js-irs-9 .irs-bar-edge, .js-irs-9 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-10 .irs-single, .js-irs-10 .irs-bar-edge, .js-irs-10 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-11 .irs-single, .js-irs-11 .irs-bar-edge, .js-irs-11 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-12 .irs-single, .js-irs-12 .irs-bar-edge, .js-irs-12 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-13 .irs-single, .js-irs-13 .irs-bar-edge, .js-irs-13 .irs-bar {background: #00AC59}")),
+                        tags$style(HTML(".js-irs-14 .irs-single, .js-irs-14 .irs-bar-edge, .js-irs-14 .irs-bar {background: #00AC59}")),
+                        
                         
                         fluidRow(
                             sidebarPanel(h1("Barabasi-Albert model"),
@@ -106,7 +124,9 @@ ui <- dashboardPage(
                                              "directed1",
                                              "Directed graph"
                                          ),
-                                         actionButton('sample1', 'Resample')
+                                         actionButton('sample1', 'Resample',
+                                                      style="color: white; background-color: #00AA59; border-color: black",
+                                                      icon = icon("arrow-up"))
                             ),
                             mainPanel(
                                 withSpinner(plotOutput("BAplot"),type = 6, color = "green")
@@ -130,7 +150,9 @@ ui <- dashboardPage(
                                 "probability",
                                 "Rewiring probability",
                                 min = 0, max = 1, step = 0.1, value = 0.05),
-                            actionButton(inputId = 'sample2', 'Resample')
+                            actionButton(inputId = 'sample2', 'Resample',
+                                         style="color: white; background-color: #00AA59; border-color: black",
+                                         icon = icon("arrow-up"))
                             
                         ),
                         mainPanel(
@@ -153,7 +175,9 @@ ui <- dashboardPage(
                                 "directed3",
                                 "Directed graph"
                             ),
-                            actionButton(inputId = 'sample3', 'Resample')
+                            actionButton(inputId = 'sample3', 'Resample',
+                                         style="color: white; background-color: #00AA59; border-color: black",
+                                         icon = icon("arrow-up"))
                         ),
                         mainPanel(
                             withSpinner(plotOutput("ERplot"), type = 6, color = "green")
@@ -179,7 +203,9 @@ ui <- dashboardPage(
                                 "directed4",
                                 "Directed graph"
                             ),
-                            actionButton('sample4', 'Resample')
+                            actionButton('sample4', 'Resample',
+                                         style="color: white; background-color: #00AA59; border-color: black",
+                                         icon = icon("arrow-up"))
                             
                         ),
                         mainPanel(
@@ -201,7 +227,9 @@ ui <- dashboardPage(
                                 min = 0.2, max = 1, step = 0.01, value = 0.2),
                             checkboxInput(
                                 "torus", "Use torus"),
-                            actionButton('sample5', 'Resample')
+                            actionButton('sample5', 'Resample',
+                                         style="color: white; background-color: #00AA59; border-color: black",
+                                         icon = icon("arrow-up"))
                             
                         ),
                         mainPanel(
@@ -229,7 +257,9 @@ ui <- dashboardPage(
                                 "citation",
                                 "Citation graph: in each time step the added edges are originating from the new vertex"
                             ),
-                            actionButton('sample6', 'Resample')
+                            actionButton('sample6', 'Resample',
+                                         style="color: white; background-color: #00AA59; border-color: black",
+                                         icon = icon("arrow-up"))
                             
                         ),
                         mainPanel(
@@ -241,10 +271,16 @@ ui <- dashboardPage(
                     fluidPage(
                         sidebarPanel(
                             h1("Upload Adjacency matrix"),
+                            p("In this tab you can upload an adjacency matrix in a .txt file. The program will
+                              create a graph corresponding to the uploaded matrix. It will then move on to compute
+                              the log likelihood for the 6 network models and show you which model was most likely
+                              to have generated your uploaded graph structure."),
                             fileInput("data", label = "", width = "400px",
                                       buttonLabel = "Choose file",
                                       placeholder = "adjacencyMatrix.txt"),
-                            actionButton("upl", label = "Upload")
+                            actionButton("upl", label = "Upload", 
+                                         style="color: white; background-color: #00AA59; border-color: black",
+                                         icon = icon("upload"))
                         ),
                         mainPanel(
                             plotOutput("graph"),
@@ -467,8 +503,9 @@ server <- function(input, output) {
 
             # Compute the loglikelihoods
             erdos.renyi.logl <- sum(dbinom(degree, size = length(degree), prob = (1/length(degree)),log = TRUE))
-
+            barabasi.albert.logl <- igraph::fit_power_law(degree)$logLik
             # Fill the table
+            tab[1,2] <- barabasi.albert.logl
             tab[2,2] <- erdos.renyi.logl
 
             # Order according to higher likelihood
