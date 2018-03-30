@@ -100,6 +100,9 @@ ui <- dashboardPage(
                                                   }
                                                   "))),
                         
+                        # Favicon in the browser
+                        tags$head(tags$link(rel="shortcut icon", href="favicon.png")),
+                        
                         # Style the sliders
                         tags$style(HTML(".js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {background: #00AC59}")),
                         tags$style(HTML(".js-irs-1 .irs-single, .js-irs-1 .irs-bar-edge, .js-irs-1 .irs-bar {background: #00AC59}")),
@@ -442,6 +445,7 @@ ui <- dashboardPage(
             )
         )
     )
+    
 )
 
 server <- function(input, output) { 
