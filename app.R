@@ -16,16 +16,16 @@ ui <- dashboardPage(
     dashboardSidebar(
         sidebarMenu(
             menuItem("Home", tabName = "overview", icon = icon("home")),
-            menuItem("Simulate", tabName = "simulation", icon = icon("calculator"),
+            menuItem("Info", tabName = "info", icon = icon("info")),
+            menuItem("Simulate", tabName = "simulation", icon = icon("cogs"),
                      menuSubItem("Erdos-Renyi model", tabName = "model3"),
                      menuSubItem("Watts-Strogatz model", tabName = "model2"),
                      menuSubItem("Barabasi-Albert model", tabName = "model1"),
                      menuSubItem("Geometric Random model", tabName = "model5"),
                      menuSubItem("Growing Random model", tabName = "model6"),
                      menuSubItem("Forest Fire model", tabName = "model4")),
-            menuItem("Upload Data", tabName = "upload", icon = icon("database")),
-            menuItem("Info", tabName = "info", icon = icon("info")),
-            menuItem("Quiz",tabName = "quiz", icon = icon("question"))
+            menuItem("Upload Data", tabName = "upload", icon = icon("upload")),
+            menuItem("Quiz",tabName = "quiz", icon = icon("question-circle"))
         )
     ),
     
