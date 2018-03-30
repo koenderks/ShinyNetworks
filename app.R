@@ -8,6 +8,7 @@ library(knitr)
 # UI ----
 ui <- dashboardPage(
     
+    title = "Shiny Networks",
     skin = "green",
     
     dashboardHeader(title = "Untangling the Growing Network Web",titleWidth = 400),
@@ -355,9 +356,9 @@ ui <- dashboardPage(
                                        radioButtons(
                                            "usage",
                                            "What do modern random graphs allow us to do?",
-                                           c("Give us exact answers to complex questions." = "1",
-                                             "Find out about statistical properties of large graphs." = "2",
-                                             "Show the interconnectedness of all things." = "3")
+                                           c("Give us exact answers to complex questions" = "1",
+                                             "Find out about statistical properties of large graphs" = "2",
+                                             "Show the interconnectedness of all things" = "3")
                                        ), actionButton("submit2", "Check"),
                                        status = "primary", height = 230, width = 12, solidHeader = TRUE))),
                         fluidRow(
