@@ -35,43 +35,49 @@ ui <- dashboardPage(
             
             # Homepage
             tabItem(tabName = "overview",
-                    column(12, align = "center", titlePanel(HTML('<font size="10">A selection of Network Models</font>'))),
+                    column(12, align = "center", titlePanel(HTML('<font size="10">Untangling the Growing Network Web</font>'))),
                     fluidRow(
-                        box(
-                            title = "Barabasi-Albert model", status = "success", solidHeader = TRUE,
-                            collapsible = FALSE,width = 4, 
-                            img(src='model1.gif', align = "center",height = 300, width = 300)
-                            #,class = "'right.Align"
-                        ),
-                        box(
-                            title = "Forest fire model", status = "success", solidHeader = TRUE,
-                            collapsible = FALSE,width = 4, 
-                            img(src='model4.gif', align = "center",height = 300, width = 300)
-                        ),
-                        box(
-                            title = "Growing Random model", status = "success", solidHeader = TRUE,
-                            collapsible = FALSE,width = 4,
-                            img(src='model6.gif', align = "center",height = 300, width = 300)
-                        )
-                    ),
+                        column( 4, align = "bottom",
+                                box(
+                                    title = "Barabasi-Albert model", status = "success", solidHeader = TRUE,
+                                    collapsible = FALSE,width = 10,
+                                    img(src = 'model1.gif', height = 250, width = 350, align = "center")
+                                )),
+                        column( 4, align = "bottom",
+                                box(
+                                    title = "Erdos-Renyi model", status = "success", solidHeader = TRUE,
+                                    collapsible = FALSE,width = 10,
+                                    img(src = 'model3.gif', height = 250, width = 350, align = "center")
+                                )),
+                        column( 4, align = "bottom",
+                                box(
+                                    title = "Watts-Strogatz model", status = "success", solidHeader = TRUE,
+                                    collapsible = FALSE,width = 10, 
+                                    img(src = 'model2.gif', height = 250, width = 350, align = "center")
+                                ))),
+                    
                     fluidRow(
-                        box(
-                            title = "Geometric Random model", status = "success", solidHeader = TRUE,
-                            collapsible = FALSE,width = 4, 
-                            img(src='model5.gif', align = "center",height = 300, width = 300)
-                        ),
-                        box(
-                            title = "Erdos-Renyi model", status = "success", solidHeader = TRUE,
-                            collapsible = FALSE,width = 4,
-                            img(src='model3.gif', align = "center",height = 300, width = 300)
-                        ),
-                        box(
-                            title = "Watts-Strogatz model", status = "success", solidHeader = TRUE,
-                            collapsible = FALSE,width = 4, 
-                            img(src='model2.gif', align = "center",height = 300, width = 300)
-                        )
+                        column( 4, align = "bottom",
+                                box(
+                                    title = "Geometric Random model", status = "success", solidHeader = TRUE,
+                                    collapsible = FALSE,width = 10, 
+                                    img(src = 'model5.gif', height = 250, width = 350, align = "center")
+                                )),
+                        column( 4, align = "bottom", 
+                                box(
+                                    title = "Growing Random model", status = "success", solidHeader = TRUE,
+                                    collapsible = FALSE,width = 10,
+                                    img(src = 'model6.gif', height = 250, width = 350, align = "center")
+                                )),
+                        column( 4, align = "bottom",
+                                box(
+                                    title = "Forest Fire model", status = "success", solidHeader = TRUE,
+                                    collapsible = FALSE,width = 10, 
+                                    img(src = 'model4.gif', height = 250, width = 350, align = "center")
+                                    
+                                ))
                     )
-            ),
+                    ),
             
             # Barabasi-Albert sampling
             tabItem(tabName = "model1",
@@ -415,6 +421,7 @@ server <- function(input, output) {
     ## Initialize Growing random model ##
     g6 <- sample_growing(n = 100, m = 1, citation=FALSE, directed = FALSE)
     g6 <- igraph::get.adjacency(g6)
+    diag(g6) <- 0
     output$SGplot <- renderPlot({qgraph::qgraph(g6, color = "black", edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                 border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
                                                 bg = "gray94", borders = FALSE)},
@@ -428,6 +435,7 @@ server <- function(input, output) {
                          g6 <- sample_growing(n = input$vertices, m = input$edges, citation=input$citation, directed = input$directed6)
                          incProgress(1/2)
                          g6 <- igraph::get.adjacency(g6)
+                         diag(g6) <- 0
                          incProgress(1/2)
                          output$SGplot <- renderPlot({qgraph::qgraph(g6, color = "black", edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                                      border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
@@ -440,22 +448,31 @@ server <- function(input, output) {
     
     observeEvent(input$upl, {
         withProgress(message = 'Generating graph', value = 0, {
-            incProgress(1/3)
+            incProgress(1/4)
             file <- input$data
             if (is.null(file)) {
                 # No file has been uploaded
                 return(NULL)
             }
-            incProgress(1/3)
             datafile <- read.table(file$datapath)
             output$graph <- renderPlot({qgraph::qgraph(datafile, labels = TRUE, bg = "gray94")})
             
-            incProgress(1/3)
-            tab <- data.frame("Model" = c("Barabasi-Albert","Erdos-Renyi", "Watts-Strogatz", "Geometric Random", "Growing Random", "Forest Fire"), "Likelihood" = rep(0,6))
-            
-            # Fill the table here
-            
-            tab <- tab[order(tab$Likelihood),]
+            incProgress(1/4)
+            tab <- data.frame("Model" = c("Barabasi-Albert","Erdos-Renyi", "Watts-Strogatz", "Geometric Random", "Growing Random", "Forest Fire"), "LogLikelihood" = rep(NA,6))
+
+            datafile <- as.matrix(datafile)
+            # Extract degree distribution
+            degree <- as.numeric(colSums(datafile))
+            incProgress(1/4)
+
+            # Compute the loglikelihoods
+            erdos.renyi.logl <- sum(dbinom(degree, size = length(degree), prob = (1/length(degree)),log = TRUE))
+
+            # Fill the table
+            tab[2,2] <- erdos.renyi.logl
+
+            # Order according to higher likelihood
+            tab <- tab[order(-tab$LogLikelihood),]
             output$result <- renderTable(tab)
         })
     })
