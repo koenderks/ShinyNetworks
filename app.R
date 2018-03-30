@@ -10,7 +10,8 @@ ui <- dashboardPage(
     
     skin = "green",
     
-    dashboardHeader(title = "Shiny Networks"),
+    #dashboardHeader(title = "Shiny Networks"),
+    dashboardHeader(title = "Untangling the Growing Network Web",titleWidth = 400),
     
     # Menu options----
     dashboardSidebar(
@@ -35,7 +36,7 @@ ui <- dashboardPage(
             
             # Homepage----
             tabItem(tabName = "overview",
-                    column(12, align = "center", titlePanel(HTML('<font size="10">Untangling the Growing Network Web</font>'))),
+                    #column(12, align = "center", titlePanel(HTML('<font size="6">Untangling the Growing Network Web</font>'))),
                     fluidRow(
                         column( 4, align = "bottom",
                                 box(
@@ -307,7 +308,10 @@ server <- function(input, output) {
     
     ## Initialize Barabasi-Albert ----
     g1 <- igraph::sample_pa(n = 150, power = 1, m = 1, directed = FALSE)
-    clusters1 <- igraph::spinglass.community(g1)$membership
+    p1 <- try({clusters1 <- igraph::spinglass.community(g1)$membership})
+    if(class(p1) == "try-error"){
+        clusters1 <- "black"
+    }
     g1 <- igraph::get.adjacency(g1)
     output$BAplot <- renderPlot({qgraph::qgraph(g1, color = clusters1, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                 border.color = "black", shape = "circle",label.cex = 1.5, label.color = "white",
@@ -320,7 +324,10 @@ server <- function(input, output) {
         withProgress(message = 'Generating graph', value = 0, {
             g <- igraph::sample_pa(n = input$n, power = input$power, m = input$m, directed = input$directed1)
             incProgress(1/3)
-            clusters1 <- igraph::spinglass.community(g)$membership
+            p1 <- try({clusters1 <- igraph::spinglass.community(g)$membership})
+            if(class(p1) == "try-error"){
+                cluster1 <- "black"
+            }
             incProgress(1/3)
             g <- igraph::get.adjacency(g)
             incProgress(1/3)
@@ -334,20 +341,27 @@ server <- function(input, output) {
     
     ## Initialize Watts-Strogatz ----
     g2 <- igraph::sample_smallworld(dim = 1, size = 100, nei = 5, p = .1)
-    clusters2 <- igraph::spinglass.community(g2)$membership
+    p2 <- try({clusters2 <- igraph::spinglass.community(g2)$membership})
+    if(class(p2) == "try-error"){
+        cluster2 <- "black"
+    }
     g2 <- igraph::get.adjacency(g2)
     output$WSplot <- renderPlot({qgraph::qgraph(g2, color = clusters2, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                 border.color = "black", shape = "circle",label.cex = 1.5, label.color = "white", repulsion = 2,
                                                 bg = "gray94", borders = FALSE)},
                                 width = 950, 
                                 height = 700)
+    
     ## Resample when button is pressed ##
     observeEvent(input$sample2,
                  {
                      withProgress(message = 'Generating graph', value = 0, {
                          g <- igraph::sample_smallworld(dim = 1, size = input$size, nei = input$neighbourhood, p = input$probability)
                          incProgress(1/3)
-                         clusters2 <- igraph::spinglass.community(g)$membership
+                         p2 <- try({clusters2 <- igraph::spinglass.community(g)$membership})
+                         if(class(p2) == "try-error"){
+                             cluster2 <- "black"
+                         }
                          incProgress(1/3)
                          g <- igraph::get.adjacency(g)
                          incProgress(1/3)
@@ -358,11 +372,12 @@ server <- function(input, output) {
                                                      height = 700)
                      })
                  })
+    
     ## Initialize Erdos-Renyi ----
     g3 <- igraph::erdos.renyi.game(n = 150, p.or.m = 400, type = "gnm", directed = FALSE)
     # Some error handling
-    p <- try({clusters3 <- igraph::spinglass.community(g3)$membership})
-    if(class(p) == "try-error"){
+    p3 <- try({clusters3 <- igraph::spinglass.community(g3)$membership})
+    if(class(p3) == "try-error"){
         clusters3 <- "black" 
     }
     g3 <- igraph::get.adjacency(g3)
@@ -371,6 +386,7 @@ server <- function(input, output) {
                                                 bg = "gray94", borders = FALSE)}, 
                                 width = 950, 
                                 height = 700)
+    
     ## Resample when button is pressed ##
     observeEvent(input$sample3,
                  {
@@ -394,7 +410,10 @@ server <- function(input, output) {
     
     ## Initialize Forest Fire model ----
     g4 <- igraph::sample_forestfire(nodes = 100, fw.prob=0.5, bw.factor=0.5,directed = FALSE)
-    clusters4 <- spinglass.community(g4)$membership
+    p4 <- try({clusters4 <- spinglass.community(g4)$membership})
+    if(class(p4) == "try-error"){
+        clusters4 <- "black"
+    }
     g4 <- igraph::get.adjacency(g4)
     output$FFplot <- renderPlot({qgraph::qgraph(g4, color = clusters4, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                 border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white",
@@ -402,6 +421,7 @@ server <- function(input, output) {
                                 width = 950, 
                                 height = 700
     )
+    
     ## Resample when button is pressed ##
     observeEvent(input$sample4,
                  {
@@ -409,7 +429,10 @@ server <- function(input, output) {
                          g4 <- igraph::sample_forestfire(nodes = input$nodes, fw.prob=input$probfor,bw.factor=input$probback,
                                                          directed = input$directed4)
                          incProgress(1/3)
-                         clusters4 <- spinglass.community(g4)$membership
+                         p4 <- try({clusters4 <- spinglass.community(g4)$membership})
+                         if(class(p4) == "try-error"){
+                             clusters4 <- "black"
+                         }
                          incProgress(1/3)
                          g4 <- igraph::get.adjacency(g4)
                          incProgress(1/3)
@@ -459,14 +482,19 @@ server <- function(input, output) {
     
     ## Initialize Growing random model ----
     g6 <- sample_growing(n = 100, m = 1, citation=FALSE, directed = FALSE)
+    p6 <- try({clusters6 <- spinglass.community(g6)$membership})
+    if(class(p6) == "try-error"){
+        clusters6 <- "black"
+    }
     g6 <- igraph::get.adjacency(g6)
     diag(g6) <- 0
-    output$SGplot <- renderPlot({qgraph::qgraph(g6, color = "black", edge.color = "darkgrey", edge.width = .5, vsize = 5, 
+    output$SGplot <- renderPlot({qgraph::qgraph(g6, color = clusters6, edge.color = "darkgrey", edge.width = .5, vsize = 5, 
                                                 border.color = "black", shape = "circle", label.cex = 1.5, label.color = "white", layout = "spring",
                                                 bg = "gray94", borders = FALSE)},
                                 width = 950, 
                                 height = 700
     )
+    
     ## Resample when button is pressed ##
     observeEvent(input$sample6,
                  {
