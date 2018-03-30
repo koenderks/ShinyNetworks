@@ -497,7 +497,7 @@ ui <- dashboardPage(
                                    img(src='sheeling.png', align = "left", height = 180, width = 150)),
                             column(width = 6,
                                    box(title = "Sheeling",
-                                       "University Leuven", 
+                                       "University of Leuven", 
                                        br(), br(),
                                        "One sentence about myself:",
                                        br(), 
