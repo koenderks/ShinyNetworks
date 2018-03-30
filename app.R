@@ -37,7 +37,8 @@ ui <- dashboardPage(
             
             # Homepage----
             tabItem(tabName = "overview",
-                    #column(12, align = "center", titlePanel(HTML('<font size="6">Untangling the Growing Network Web</font>'))),
+                    column(12, align = "center", titlePanel(HTML('<font size="10" face = "Impact">An Illustrative Collection of Network Models</font>'))),
+                    br(),
                     br(),
                     br(),
                     br(),
@@ -333,7 +334,6 @@ ui <- dashboardPage(
             ),
             # Quiz----
             tabItem(tabName = "quiz",
-                    #column(12, align = "center", titlePanel("Test Your Knowledge")),
                     fluidPage(
                         fluidRow(
                             column(width = 4,
@@ -444,72 +444,72 @@ ui <- dashboardPage(
             tabItem(tabName = "developers",
                     column(12, align = "center", titlePanel("The Brains")),
                     fluidPage(
-                      fluidRow(
-                        column(width = 2,
-                               img(src='ina.jpg', align = "left", height = 180, width = 150)),
-                        column(width = 6,
-                               box(title = "Ina",
-                                   "University of Tübingen", 
-                                   br(), br(),
-                                   "One sentence about myself:",
-                                   br(), 
-                                   "'I am a highly motivated person trapped in a lazy body'", 
-                                   status = "primary", width = NULL, solidHeader = TRUE, height = 180))
-                      ),
-                      fluidRow(
-                        column(width = 2,
-                               img(src='koen.jpeg', align = "left", height = 180, width = 150)),
-                        column(width = 6,
-                               box(title = "Koen",
-                                   "University of Amsterdam", 
-                                   br(), br(),
-                                   "One sentence about myself:",
-                                   br(), 
-                                   "'I really love my dog.'", 
-                                   status = "primary", width = NULL, solidHeader = TRUE, height = 180))
-                      ),
-                      fluidRow(
-                        column(width = 2,
-                               img(src='laura.jpg', align = "left", height = 180, width = 150)),
-                        column(width = 6,
-                               box(title = "Laura",
-                                   "University of Glasgow", 
-                                   br(), br(),
-                                   "One sentence about myself:",
-                                   br(), 
-                                   "'I eat porridge every day.'", 
-                                   status = "primary", width = NULL, solidHeader = TRUE, height = 180))
-                      ),
-                      fluidRow(
-                        column(width = 2,
-                               img(src='margo.jpg', align = "left", height = 180, width = 150)),
-                        column(width = 6,
-                               box(title = "Margo",
-                                   "University of Leuven", 
-                                   br(), br(),
-                                   "One sentence about myself:",
-                                   br(), 
-                                   "'Sushi makes me happy.'", 
-                                   status = "primary", width = NULL, solidHeader = TRUE, height = 180))
-                      ),
-                      fluidRow(
-                        column(width = 2,
-                               img(src='sheeling.png', align = "left", height = 180, width = 150)),
-                        column(width = 6,
-                               box(title = "Sheeling",
-                                   "University Leuven", 
-                                   br(), br(),
-                                   "One sentence about myself:",
-                                   br(), 
-                                   "'HAHAHAHAHAHAHAHAHAHAHAHAHA{!}'", 
-                                   status = "primary", width = NULL, solidHeader = TRUE, height = 180))
-            ),
-            fluidRow(
-              column(width = 4),
-              column(width = 4,
-                     img(src='allOfus.jpg', align = "center", height = 250, width = 300)
-                     ))
-        )
+                        fluidRow(
+                            column(width = 2,
+                                   img(src='ina.jpg', align = "left", height = 180, width = 150)),
+                            column(width = 6,
+                                   box(title = "Ina",
+                                       "University of Tubingen", 
+                                       br(), br(),
+                                       "One sentence about myself:",
+                                       br(), 
+                                       "'I am a highly motivated person trapped in a lazy body'", 
+                                       status = "success", width = NULL, solidHeader = TRUE, height = 180))
+                        ),
+                        fluidRow(
+                            column(width = 2,
+                                   img(src='koen.jpg', align = "left", height = 180, width = 150)),
+                            column(width = 6,
+                                   box(title = "Koen",
+                                       "University of Amsterdam", 
+                                       br(), br(),
+                                       "One sentence about myself:",
+                                       br(), 
+                                       "'I really love my dog.'", 
+                                       status = "success", width = NULL, solidHeader = TRUE, height = 180))
+                        ),
+                        fluidRow(
+                            column(width = 2,
+                                   img(src='laura.jpg', align = "left", height = 180, width = 150)),
+                            column(width = 6,
+                                   box(title = "Laura",
+                                       "University of Glasgow", 
+                                       br(), br(),
+                                       "One sentence about myself:",
+                                       br(), 
+                                       "'I eat porridge every day.'", 
+                                       status = "success", width = NULL, solidHeader = TRUE, height = 180))
+                        ),
+                        fluidRow(
+                            column(width = 2,
+                                   img(src='margo.jpg', align = "left", height = 180, width = 150)),
+                            column(width = 6,
+                                   box(title = "Margo",
+                                       "University of Leuven", 
+                                       br(), br(),
+                                       "One sentence about myself:",
+                                       br(), 
+                                       "'Sushi makes me happy.'", 
+                                       status = "success", width = NULL, solidHeader = TRUE, height = 180))
+                        ),
+                        fluidRow(
+                            column(width = 2,
+                                   img(src='sheeling.png', align = "left", height = 180, width = 150)),
+                            column(width = 6,
+                                   box(title = "Sheeling",
+                                       "University Leuven", 
+                                       br(), br(),
+                                       "One sentence about myself:",
+                                       br(), 
+                                       "'HAHAHAHAHAHAHAHAHAHAHAHAHA{!}'", 
+                                       status = "success", width = NULL, solidHeader = TRUE, height = 180))
+                        ),
+                        fluidRow(
+                            column(width = 4),
+                            column(width = 4,
+                                   img(src='allOfus.jpg', align = "center", height = 250, width = 300)
+                            ))
+                    )
             )
         )
     )
@@ -764,9 +764,16 @@ server <- function(input, output) {
             # Compute the loglikelihoods
             erdos.renyi.logl <- sum(dbinom(degree, size = length(degree), prob = (1/length(degree)),log = TRUE))
             barabasi.albert.logl <- igraph::fit_power_law(degree)$logLik
+            geometric.logl <- sum(dunif(degree, min = 0,max = length(degree),log = TRUE))
+            
             # Fill the table
             tab[1,2] <- barabasi.albert.logl
             tab[2,2] <- erdos.renyi.logl
+            tab[3,2] <- -Inf
+            tab[4,2] <- geometric.logl
+            tab[5,2] <- -Inf
+            tab[6,2] <- -Inf
+            
             
             # Order according to higher likelihood
             tab <- tab[order(-tab$LogLikelihood),]
