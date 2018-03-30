@@ -440,8 +440,76 @@ ui <- dashboardPage(
                         )
                     )
             ),
+            # developersPage ----
             tabItem(tabName = "developers",
-                    fluidPage()
+                    column(12, align = "center", titlePanel("The Brains")),
+                    fluidPage(
+                      fluidRow(
+                        column(width = 2,
+                               img(src='ina.jpg', align = "left", height = 180, width = 150)),
+                        column(width = 6,
+                               box(title = "Ina",
+                                   "University of Tübingen", 
+                                   br(), br(),
+                                   "One sentence about myself:",
+                                   br(), 
+                                   "'I am a highly motivated person trapped in a lazy body'", 
+                                   status = "primary", width = NULL, solidHeader = TRUE, height = 180))
+                      ),
+                      fluidRow(
+                        column(width = 2,
+                               img(src='koen.jpeg', align = "left", height = 180, width = 150)),
+                        column(width = 6,
+                               box(title = "Koen",
+                                   "University of Amsterdam", 
+                                   br(), br(),
+                                   "One sentence about myself:",
+                                   br(), 
+                                   "'I really love my dog.'", 
+                                   status = "primary", width = NULL, solidHeader = TRUE, height = 180))
+                      ),
+                      fluidRow(
+                        column(width = 2,
+                               img(src='laura.jpg', align = "left", height = 180, width = 150)),
+                        column(width = 6,
+                               box(title = "Laura",
+                                   "University of Glasgow", 
+                                   br(), br(),
+                                   "One sentence about myself:",
+                                   br(), 
+                                   "'I eat porridge every day.'", 
+                                   status = "primary", width = NULL, solidHeader = TRUE, height = 180))
+                      ),
+                      fluidRow(
+                        column(width = 2,
+                               img(src='margo.jpg', align = "left", height = 180, width = 150)),
+                        column(width = 6,
+                               box(title = "Margo",
+                                   "University of Leuven", 
+                                   br(), br(),
+                                   "One sentence about myself:",
+                                   br(), 
+                                   "'Sushi makes me happy.'", 
+                                   status = "primary", width = NULL, solidHeader = TRUE, height = 180))
+                      ),
+                      fluidRow(
+                        column(width = 2,
+                               img(src='sheeling.png', align = "left", height = 180, width = 150)),
+                        column(width = 6,
+                               box(title = "Sheeling",
+                                   "University Leuven", 
+                                   br(), br(),
+                                   "One sentence about myself:",
+                                   br(), 
+                                   "'HAHAHAHAHAHAHAHAHAHAHAHAHA{!}'", 
+                                   status = "primary", width = NULL, solidHeader = TRUE, height = 180))
+            ),
+            fluidRow(
+              column(width = 4),
+              column(width = 4,
+                     img(src='allOfus.jpg', align = "center", height = 250, width = 300)
+                     ))
+        )
             )
         )
     )
