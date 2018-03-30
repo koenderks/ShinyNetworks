@@ -442,7 +442,9 @@ ui <- dashboardPage(
             ),
             # developersPage ----
             tabItem(tabName = "developers",
-                    column(12, align = "center", titlePanel("The Brains")),
+                    column(12, align = "center", titlePanel(HTML('<font size="10" face = "Impact">The brains behind the project</font>'))),
+                    br(),
+                    br(),
                     fluidPage(
                         fluidRow(
                             column(width = 2,
@@ -465,7 +467,7 @@ ui <- dashboardPage(
                                        br(), br(),
                                        "One sentence about myself:",
                                        br(), 
-                                       "'I really love my dog.'", 
+                                       "'I love my dog.'", 
                                        status = "success", width = NULL, solidHeader = TRUE, height = 180))
                         ),
                         fluidRow(
