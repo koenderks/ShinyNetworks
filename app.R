@@ -291,10 +291,89 @@ ui <- dashboardPage(
                     )
             ),
             # Info ----
-            tabItem(tabName = "info",
-                    column(12, align = "center", titlePanel("Information")),
-                    fluidPage()
-            ),
+            tabItem((tabName = "quiz",
+                    column(12, align = "center", titlePanel("Test Your Knowledge")),
+                fluidPage(
+                    fluidRow(
+                      #infoBox(title = "Question 1", value = "What does this graph represent?", 
+                      #withSpinner(plotOutput("quizPlot1", height = 200), type = 6),
+                      #   imageOutput("quizPlot1"),
+                      #   icon = icon("question")),
+                      column(width = 6,
+                             box(img(src='quizPlot1.jpeg', align = "center", height = 207,
+                                     width = 220), status = "primary",
+                                 width = NULL, background = "light-blue")),
+                      column(width = 6,
+                             box(title = "Question 1",
+                                 radioButtons(
+                                   "graph_id",
+                                   "What type of graph is displayed here?",
+                                   c("Erdos-Renyi" = "erdos",
+                                     "Barabasi-Albert model" = "barab",
+                                     "Forest Fire model" = "forest",
+                                     "Watts-Strogatz" = "watts"
+                                   )
+                                 ), actionButton("submit1", "Check"),
+                                 status = "primary", width = NULL, solidHeader = TRUE)
+                      )),
+                    fluidRow(
+                      box(title = "Question 2",
+                          radioButtons(
+                            "usage",
+                            "What do modern random graphs allow us to do?",
+                            c("Give us exact answers to complex questions." = "1",
+                              "Find out about statistical properties of large graphs." = "2",
+                              "Show the interconnectedness of all things." = "3")
+                          ), actionButton("submit2", "Check"),
+                          status = "primary", width = 12, solidHeader = TRUE)
+                    ),
+                    fluidRow(
+                      column(width = 6,
+                             box(title = "Question 3a",
+                                 radioButtons(
+                                   "barabasi",
+                                   "What might one use the Barabasi-Albert model to explain?",
+                                   c("World Wide Web" = "1", 
+                                     "Social Networks" = "2",
+                                     "Citation Networks" = "3")
+                                 ), actionButton("submit3", "Check"), 
+                                 status = "primary", height = 250, width = NULL, solidHeader = TRUE)
+                      ),
+                      column(width = 6,
+                             box(title = "Question 3b",
+                                 radioButtons(
+                                   "barabasi2",
+                                   "What is true about this model?",
+                                   c("It has a power-law degree distribution" = "1",
+                                     "It does not include preferential attachment" = "2",
+                                     "The number of its nodes decrease over time" = "3",
+                                     "The algorithm creates all included nodes simultaneously" = "4")
+                                 ), 
+                                 actionButton("submit4", "Check"),
+                                 status = "primary", width = NULL, solidHeader = TRUE)
+                      )),
+                    fluidRow(
+                      column(width = 6,
+                             box(title = "Question 4",
+                                 radioButtons(
+                                   "fire",
+                                   "What model might the Gif on the right illustrate?",
+                                   c("Erdos-Renyi" = "erdos",
+                                     "Random Graph model" = "random",
+                                     "Forest Fire model" = "forest",
+                                     "Watts-Strogatz" = "watts")
+                                 ),
+                                 actionButton("submit5", "Check"),
+                                 status = "primary", width = NULL, solidHeader = TRUE
+                                 )),
+                      column(width = 6,
+                             box(img(src='forest_fire_model.gif', align = "center", height = 225,
+                                     width = 220), status = "primary",
+                                 width = NULL, background = "light-blue"))
+                    )
+                    
+                )
+                ),
             # Quiz----
             tabItem(tabName = "quiz",
                     column(12, align = "center", titlePanel("Quiz")),
@@ -544,6 +623,52 @@ server <- function(input, output) {
             tab <- tab[order(-tab$LogLikelihood),]
             output$result <- renderTable(tab)
         })
+    })
+    
+    # quizResponses ----
+    
+    correctResp <- c("Correct! Well done!", "Super!", "Great job!", "Your answer is right!", "You're amazing")
+    wrongResp <- c("Not quite right, try again!", "Not quite, maybe try another answer!", 
+                   "That is not the right answer.", "You might want to rethink your answer.")
+      
+    observeEvent(input$submit1, {
+      if (input$graph_id == "erdos") {
+        showNotification(sample(wrongResp, 1), type = "message")
+      } else if (input$graph_id == "barab") {
+        showNotification(sample(wrongResp, 1), type = "message")
+      } else if (input$graph_id == "forest") {
+        showNotification(sample(wrongResp, 1), type = "message")
+      } else {
+        showNotification(sample(correctResp, 1), type = "message")
+      }
+    })
+    
+    observeEvent(input$submit2, {
+      if (input$usage == "1" | input$usage == "3") {
+        showNotification(sample(wrongResp, 1), type = "message")
+      } else {
+        showNotification(sample(correctResp, 1), type = "message")
+      } 
+    })
+    
+    observeEvent(input$submit3, {
+      showNotification("Good answer - actually, all response options are correct here.", type = "message")
+    })
+    
+    observeEvent(input$submit4, {
+      if (input$barabasi2 == "2" | input$barabasi2 == "3" | input$barabasi2 == "4") {
+        showNotification(sample(wrongResp, 1), type = "message")
+      } else {
+        showNotification(sample(correctResp, 1), type = "message")
+      } 
+    })
+    
+    observeEvent(input$submit5, {
+      if (input$fire == "forest") {
+        showNotification(sample(correctResp, 1), type = "message")
+      } else {
+        showNotification(sample(wrongResp, 1), type = "message")
+      }
     })
     
 }
