@@ -328,113 +328,112 @@ ui <- dashboardPage(
             ),
             # Quiz----
             tabItem(tabName = "quiz",
-                    column(12, align = "center", titlePanel("Test Your Knowledge")),
-                fluidPage(
-                    fluidRow(
-                      column(width = 4,
-                             # question1 ----
-                             box(title = "Question 1",
-                                 radioButtons(
-                                   "graph_id",
-                                   "What type of graph is displayed on the right",
-                                   c("Erdos-Renyi" = "erdos",
-                                     "Barabasi-Albert model" = "barab",
-                                     "Forest Fire model" = "forest",
-                                     "Watts-Strogatz" = "watts"
-                                   )
-                                 ), actionButton("submit1", "Check"),
-                                 status = "primary", width = NULL, solidHeader = TRUE)
-                      ),
-                      column(width = 4,
-                             box(img(src='quizPlot1.jpeg', align = "center", height = 207,
-                                     width = 260), status = "primary",
-                                 width = NULL, background = "light-blue")),
-                      column(width = 4,
-                             # question2 ----
-                             box(title = "Question 2",
-                                 radioButtons(
-                                   "usage",
-                                   "What do modern random graphs allow us to do?",
-                                   c("Give us exact answers to complex questions." = "1",
-                                     "Find out about statistical properties of large graphs." = "2",
-                                     "Show the interconnectedness of all things." = "3")
-                                 ), actionButton("submit2", "Check"),
-                                 status = "primary", height = 230, width = 12, solidHeader = TRUE))),
-                    fluidRow(
-                      column(width = 4,
-                             # question3a ----
-                             box(title = "Question 3a",
-                                 radioButtons(
-                                   "barabasi",
-                                   "What might one use the Barabasi-Albert model to explain?",
-                                   c("World Wide Web" = "1", 
-                                     "Social Networks" = "2",
-                                     "Citation Networks" = "3")
-                                 ), actionButton("submit3a", "Check"), 
-                                 status = "primary", height = 265, width = NULL, solidHeader = TRUE)
-                      ),
-                      column(width = 4,
-                             # question3b ----
-                             box(title = "Question 3b",
-                                 radioButtons(
-                                   "barabasi2",
-                                   "So, what is true about the Barabasi-Albert model?",
-                                   c("It has a power-law degree distribution" = "1",
-                                     "It does not include preferential attachment" = "2",
-                                     "The number of its nodes decrease over time" = "3",
-                                     "The algorithm creates all included nodes simultaneously" = "4")
-                                 ), 
-                                 actionButton("submit3b", "Check"),
-                                 status = "primary", height = 265, width = NULL, solidHeader = TRUE)
-                      ),
-                      column(width = 4,
-                             # question4 ----
-                             box(title = "Question 4",
-                                 radioButtons(
-                                   "geom",
-                                   "What might 'degree assortativity' observed in random geometric graphs
-                                   refer to?",
-                                   c("'Popular' nodes are particularly likely to be linked to other popular nodes" = "1",
-                                     "The number of edges is dependent on the number of nodes present" = "2",
-                                     "Only nodes with the same number of links are connected" = "3")
-                                 ),
-                                 actionButton("submit4", "Check"),
-                                 status = "primary", width = NULL, solidHeader = TRUE)
-                        
-                      )),
-                    fluidRow(
-                      column(width = 4,
-                             box(img(src='forest_fire_model.gif', align = "center", height = 225,
-                                     width = 240), status = "primary",
-                                 width = NULL, background = "light-blue")),
-                      column(width = 4,
-                             # question5 ----
-                            box(title = "Question 5",
-                                radioButtons(
-                                  "fire",
-                                  "What model might the Gif on the left illustrate?",
-                                  c("Erdos-Renyi" = "erdos",
-                                    "Random Graph model" = "random",
-                                    "Forest Fire model" = "forest",
-                                    "Watts-Strogatz" = "watts")
-                                ),
-                                actionButton("submit5", "Check"),
-                                status = "primary", height = 249, width = NULL, solidHeader = TRUE
+                    #column(12, align = "center", titlePanel("Test Your Knowledge")),
+                    fluidPage(
+                        fluidRow(
+                            column(width = 4,
+                                   # question1 ----
+                                   box(title = "Question 1",
+                                       radioButtons(
+                                           "graph_id",
+                                           "What type of graph is displayed on the right",
+                                           c("Erdos-Renyi" = "erdos",
+                                             "Barabasi-Albert model" = "barab",
+                                             "Forest Fire model" = "forest",
+                                             "Watts-Strogatz" = "watts"
+                                           )
+                                       ), actionButton("submit1", "Check"),
+                                       status = "primary", width = NULL, solidHeader = TRUE)
+                            ),
+                            column(width = 4,
+                                   box(img(src='quizPlot1.jpeg', align = "center", height = 207,
+                                           width = 260), status = "primary",
+                                       width = NULL, background = "light-blue")),
+                            column(width = 4,
+                                   # question2 ----
+                                   box(title = "Question 2",
+                                       radioButtons(
+                                           "usage",
+                                           "What do modern random graphs allow us to do?",
+                                           c("Give us exact answers to complex questions." = "1",
+                                             "Find out about statistical properties of large graphs." = "2",
+                                             "Show the interconnectedness of all things." = "3")
+                                       ), actionButton("submit2", "Check"),
+                                       status = "primary", height = 230, width = 12, solidHeader = TRUE))),
+                        fluidRow(
+                            column(width = 4,
+                                   # question3a ----
+                                   box(title = "Question 3a",
+                                       radioButtons(
+                                           "barabasi",
+                                           "What might one use the Barabasi-Albert model to explain?",
+                                           c("World Wide Web" = "1", 
+                                             "Social Networks" = "2",
+                                             "Citation Networks" = "3")
+                                       ), actionButton("submit3a", "Check"), 
+                                       status = "primary", height = 265, width = NULL, solidHeader = TRUE)
+                            ),
+                            column(width = 4,
+                                   # question3b ----
+                                   box(title = "Question 3b",
+                                       radioButtons(
+                                           "barabasi2",
+                                           "So, what is true about the Barabasi-Albert model?",
+                                           c("It has a power-law degree distribution" = "1",
+                                             "It does not include preferential attachment" = "2",
+                                             "The number of its nodes decrease over time" = "3",
+                                             "The algorithm creates all included nodes simultaneously" = "4")
+                                       ), 
+                                       actionButton("submit3b", "Check"),
+                                       status = "primary", height = 265, width = NULL, solidHeader = TRUE)
+                            ),
+                            column(width = 4,
+                                   # question4 ----
+                                   box(title = "Question 4",
+                                       radioButtons(
+                                           "geom",
+                                           "What might 'degree assortativity' observed in random geometric graphs
+                                           refer to?",
+                                           c("'Popular' nodes are particularly likely to be linked to other popular nodes" = "1",
+                                             "The number of edges is dependent on the number of nodes present" = "2",
+                                             "Only nodes with the same number of links are connected" = "3")
+                                       ),
+                                       actionButton("submit4", "Check"),
+                                       status = "primary", width = NULL, solidHeader = TRUE)
+                                   
                             )),
-                      column(width = 4,
-                             # question6 ----
-                             box(title = "Question 6",
-                               numericInput(
-                                 "final",
-                                 "Now for the big finale: On a scale from 1 to 10, how would you rate this App?",
-                                 value = 0, min = 0, max = 10, step = 1
-                               ),
-                               actionButton("submit6", "Submit"),
-                               status = "primary", height = 249, width = NULL, solidHeader = TRUE
-                             ))
-                )
-                )
-            )
+                        fluidRow(
+                            column(width = 4,
+                                   box(img(src='forest_fire_model.gif', align = "center", height = 225,
+                                           width = 240), status = "primary",
+                                       width = NULL, background = "light-blue")),
+                            column(width = 4,
+                                   # question5 ----
+                                   box(title = "Question 5",
+                                       radioButtons(
+                                           "fire",
+                                           "What model might the Gif on the left illustrate?",
+                                           c("Erdos-Renyi" = "erdos",
+                                             "Random Graph model" = "random",
+                                             "Forest Fire model" = "forest",
+                                             "Watts-Strogatz" = "watts")
+                                       ),
+                                       actionButton("submit5", "Check"),
+                                       status = "primary", height = 249, width = NULL, solidHeader = TRUE
+                                   )),
+                            column(width = 4,
+                                   # question6 ----
+                                   box(title = "Question 6",
+                                       numericInput(
+                                           "final",
+                                           "Now for the big finale: On a scale from 1 to 10, how would you rate this App?",
+                                           value = 0, min = 0, max = 10, step = 1
+                                       ),
+                                       actionButton("submit6", "Submit"),
+                                       status = "primary", height = 249, width = NULL, solidHeader = TRUE
+                                   ))
+                        )
+                    )
             )
         )
     )
@@ -544,7 +543,7 @@ server <- function(input, output) {
                      })
                  })
     
-    ## Initialize Forest Fire model ----
+    ## Initialize Forest Fire ----
     g4 <- igraph::sample_forestfire(nodes = 100, fw.prob=0.5, bw.factor=0.5,directed = FALSE)
     p4 <- try({clusters4 <- spinglass.community(g4)$membership})
     if(class(p4) == "try-error"){
@@ -581,7 +580,7 @@ server <- function(input, output) {
                      })
                  })
     
-    ## Initialize Geometric random model ----
+    ## Initialize Geometric Random ----
     g5 <- sample_grg(nodes = 100, radius = 0.2, torus = FALSE)
     p5 <- try({clusters5 <- spinglass.community(g5)$membership})
     if (class(p5) == "try-error"){
@@ -616,7 +615,7 @@ server <- function(input, output) {
                      })
                  })
     
-    ## Initialize Growing random model ----
+    ## Initialize Growing Random ----
     g6 <- sample_growing(n = 100, m = 1, citation=FALSE, directed = FALSE)
     p6 <- try({clusters6 <- spinglass.community(g6)$membership})
     if(class(p6) == "try-error"){
@@ -693,62 +692,63 @@ server <- function(input, output) {
     correctResp <- c("Correct! Well done!", "Super!", "Great job!", "Your answer is right!", "You're amazing")
     wrongResp <- c("Not quite right, try again!", "Not quite, maybe try another answer!", 
                    "That is not the right answer.", "You might want to rethink your answer.")
-      
+    
     observeEvent(input$submit1, {
-      if (input$graph_id == "erdos") {
-        showNotification(sample(wrongResp, 1), type = "warning")
-      } else if (input$graph_id == "barab") {
-        showNotification(sample(wrongResp, 1), type = "warning")
-      } else if (input$graph_id == "forest") {
-        showNotification(sample(wrongResp, 1), type = "warning")
-      } else {
-        showNotification(sample(correctResp, 1), type = "message")
-      }
+        if (input$graph_id == "erdos") {
+            showNotification(sample(wrongResp, 1), type = "warning")
+        } else if (input$graph_id == "barab") {
+            showNotification(sample(wrongResp, 1), type = "warning")
+        } else if (input$graph_id == "forest") {
+            showNotification(sample(wrongResp, 1), type = "warning")
+        } else {
+            showNotification(sample(correctResp, 1), type = "message")
+        }
     })
     
     observeEvent(input$submit2, {
-      if (input$usage == "1" | input$usage == "3") {
-        showNotification(sample(wrongResp, 1), type = "warning")
-      } else {
-        showNotification(sample(correctResp, 1), type = "message")
-      } 
+        if (input$usage == "1" | input$usage == "3") {
+            showNotification(sample(wrongResp, 1), type = "warning")
+        } else {
+            showNotification(sample(correctResp, 1), type = "message")
+        } 
     })
     
     observeEvent(input$submit3a, {
-      showNotification("Good answer - actually, all response options are correct here.", type = "message")
+        showNotification("Good answer - actually, all response options are correct here.", type = "message")
     })
     
     observeEvent(input$submit3b, {
-      if (input$barabasi2 == "2" | input$barabasi2 == "3" | input$barabasi2 == "4") {
-        showNotification(sample(wrongResp, 1), type = "warning")
-      } else {
-        showNotification(sample(correctResp, 1), type = "message")
-      } 
+        if (input$barabasi2 == "2" | input$barabasi2 == "3" | input$barabasi2 == "4") {
+            showNotification(sample(wrongResp, 1), type = "warning")
+        } else {
+            showNotification(sample(correctResp, 1), type = "message")
+        } 
     })
     
     observeEvent(input$submit4, {
-      if (input$geom == "1") {
-        showNotification(sample(correctResp, 1), type = "message")
-      } else
-        showNotification(sample(wrongResp, 1), type = "warning")
+        if (input$geom == "1") {
+            showNotification(sample(correctResp, 1), type = "message")
+        } else
+            showNotification(sample(wrongResp, 1), type = "warning")
     })
     
     observeEvent(input$submit5, {
-      if (input$fire== "forest") {
-        showNotification(sample(correctResp, 1), type = "message")
-      } else
-        showNotification(sample(wrongResp, 1), type = "warning")
+        if (input$fire== "forest") {
+            showNotification(sample(correctResp, 1), type = "message")
+        } else
+            showNotification(sample(wrongResp, 1), type = "warning")
     })
     
     
     observeEvent(input$submit6, {
-      if (input$final == "10") {
-        showNotification("You're absolutely right! Well done!", type = "message")
-      } else {
-        showNotification(sample(wrongResp, 1), type = "warning")
-      }
+        if (input$final == "10") {
+            showNotification("You're absolutely right! Well done!", type = "message")
+        } else {
+            showNotification(sample(wrongResp, 1), type = "warning")
+        }
     })
     
 }
 
+# Run----
 shinyApp(ui, server)
