@@ -875,7 +875,7 @@ server <- function(input, output) {
             degree <- igraph::degree(graphobject, mode = "in")
             
             output$graph <- renderPlot({qgraph::qgraph(datafile, labels = TRUE, directed = FALSE,
-                                                       bg = "gray94", color = userclusters)})
+                                                       bg = "gray94", color = userclusters, layout = "spring")})
             
             incProgress(1/4)
             
